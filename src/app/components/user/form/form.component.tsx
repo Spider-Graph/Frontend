@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { makeStyles, FormGroup, Button } from '@material-ui/core';
+import { FormGroup, Button, PropTypes, makeStyles } from '@material-ui/core';
+
+import { UserDetailsDTO } from '@models/api/user.dto';
 import { Input } from '@components/general/input/input.component';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '50%',
     minWidth: 500,
@@ -24,7 +26,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const UserForm = ({ button, buttonColor, email, link, linkLabel, onLink, onSubmit }) => {
+interface UserFormProps {
+  button: string;
+  buttonColor?: PropTypes.Color;
+  email?: boolean;
+  link?: boolean;
+  linkLabel?: string;
+  onLink: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onSubmit: (user: UserDetailsDTO) => void
+}
+
+const UserForm: React.FunctionComponent<UserFormProps> = ({ button, buttonColor, email, link, linkLabel, onLink, onSubmit }) => {
   const classes = useStyles({});
   const [user, setUser] = React.useState({ username: '', email: '', password: '' });
 
