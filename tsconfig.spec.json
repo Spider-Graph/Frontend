@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "jsx": "react",
+    "preset": "ts-jest"
+  },
+  "include": ["jest.config.js", "setupTest.ts"]
+}

@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "chrome",
+      "request": "launch",
+      "port": 9986,
+      "preLaunchTask": "npm: start",
+      "runtimeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "runtimeArgs": [
+        "--profile-directory=Debug",
+        "--disable-infobars",
+        " --disable-session-crashed-bubble"
+      ],
+      "userDataDir": "${workspaceRoot}.vscode/chrome",
+      "url": "http://localhost:3000/#",
+      "webRoot": "${workspaceRoot}/src",
+
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:/*": "${webRoot}/*",
+      }
+    }
+  ]
+}
