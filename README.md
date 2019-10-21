@@ -1,44 +1,137 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Front-end
 
-## Available Scripts
+## Proposal
 
-In the project directory, you can run:
+### What problem does your app solve
 
-### `yarn start`
+Helps user visual differences within multiple datasets on a matrix.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Be as specific as possible; how does your app solve the problem
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Provides an easy to use user interface for managing spider charts and datasets making it easy to read and understand the data.
 
-### `yarn test`
+### What is the mission statement
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Data is dynamic. Render it better next time.
 
-### `yarn build`
+## Features
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### What features are required for your minimum viable product
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+1. Login to account
+2. Store multiple charts on account
+3. Allow multiple datasets per chart
+4. Allow editing of labels on chart
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### What features do you wish to put in a future release
 
-### `yarn eject`
+1. Sharing charts
+2. Sharing datasets
+3. Gallery of charts
+4. Templates
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### What do the top 3 similar apps do for their users
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Excel - Allows creation of spider graphs through datasets as well as many other charts. The problem here is how convoluted it is to create a chart when it could be much simpler.
+* Google Sheets - Similar to Excel in it’s functionality and problems.
+* Visual Paradigm - Another online excel tool that has templates for charts however has the same limitations as any spreadsheet based tool  being that it is clunky and hard for a novice to pickup.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Design - Planning
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### What design system will you use
 
-## Learn More
+Material Design
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### What will your user flow be
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Sign in / Create an Account ->
+ -- Home Page with first chart ->
+ -- -- Modify Dataset or Chart
+ -- -- Create a new chart
+ -- -- User taps nav to see categories and user switcher ->
+ -- -- --  Shown a list of charts they have on their account
+ -- -- --  User taps user account to sign out or edit
+
+### What is the URL to your wireframes
+[Figma Wireframes](https://www.figma.com/file/o6GSpN5vFpmogvtJw0Y3hs/Untitled?node-id=0%3A1)
+
+## Frameworks - Libraries
+
+### What 3rd party frameworks/libraries are you considering using
+
+* Client: React, Material UI, Chart.js, TypeScript
+* Server: Nest.js, TypeORM, MongoDB, BCrypt, CORS, GraphQL
+* Marketing: LESS, Modern Normalize
+
+### Do APIs require you to contact its maintainer to gain access
+
+All of our APIs are internal.
+
+### Are you required to pay to use the API
+
+No.
+
+### Have you considered using Apple Frameworks (MapKit, Healthkit, ARKit?)
+
+N\A
+
+## Target Audience
+
+### Who is your target audience? Be specific
+
+Anyone that needs to compare different sets of data and
+comparing metrics of those data sets. IE: Baseball players,
+Racecars, RPG Characters, Time Management.
+
+
+### What feedback have you gotten from potential users
+
+None
+
+### Have you validated the problem and your solution with your target audience? How?
+
+None
+
+## Research
+
+### Research thoroughly before writing a single line of code. Solidify the features of your app conceptually before implementation. Spend the weekend researching so you can hit the ground running on Monday
+
+Prototype Key Feature(s)
+
+* This is the “bread and butter” of the app, this is what makes your app yours. Calculate how long it takes to implement these features and triple the time estimated. That way you’ll have plenty of time to finish. It is preferred to drop features and spend more time working on your MVP features if needed.
+
+## Contribute
+
+### Download Source
+
+```bash
+git clone https://github.com/Spider-Graph/Frontend.git
+```
+
+### Branch
+
+```bash
+git checkout -b <your name>
+```
+
+### Install Dependencies
+
+```bash
+yarn
+```
+
+### Start Development Server
+
+```bash
+yarn start
+```
+
+### Upload changes
+
+```bash
+git push origin <your-name>
+```
+
+### Create Pull Request
+
+[Pull Request](https://github.com/Spider-Graph/Frontend/compare)
