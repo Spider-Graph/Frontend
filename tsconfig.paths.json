@@ -10,7 +10,7 @@
       "@models/*": ["app/models/*"],
       "@pages/*": ["app/pages/*"],
       "@public/*": ["../public/*"],
-      "@state/*": ["app/state/*"],
+      "@services/*": ["app/services/*"],
       "@static/*": ["../public/*"],
       "@styles/*": ["app/styles/*"],
       "@theme/*": ["app/theme/*"],
