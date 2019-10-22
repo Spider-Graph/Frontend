@@ -4,6 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { Icon, makeStyles } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 
+import { StoreService } from '@services/store.service';
+import { ChartDisplay } from '@components/chart/display/display.component';
 import { NavBar } from '@components/nav/bar/bar.component';
 import { NavDrawer } from '@components/nav/drawer/drawer.component';
 
@@ -24,6 +26,8 @@ const useStyles = makeStyles(theme => ({
 const MainPage: React.FunctionComponent = () => {
   const classes = useStyles({});
   const history = useHistory();
+  const store = StoreService.useStore();
+  const id = store.get('chart');
   const [nav, setNav] = React.useState(false);
   const [speedDial, setSpeedDial] = React.useState(false);
   const actions = [
@@ -33,6 +37,8 @@ const MainPage: React.FunctionComponent = () => {
 
   return (
     <>
+      <NavBar onMenu={() => setNav(true)} onShare={() => {}} />
+      {id && <ChartDisplay id={id} />}
       <SpeedDial
         className={classes.speedDial}
         FabProps={{ color: 'secondary' }}
@@ -51,7 +57,6 @@ const MainPage: React.FunctionComponent = () => {
           />
         ))}
       </SpeedDial>
-      <NavBar onMenu={() => setNav(true)} onShare={() => {}} />
       <NavDrawer open={nav} onClose={() => setNav(false)} />
     </>
   );
