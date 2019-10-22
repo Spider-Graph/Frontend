@@ -4,7 +4,7 @@ import { Redirect, Route, useHistory } from 'react-router-dom';
 import { StoreService } from '@services/store.service';
 
 type PrivateRoute = {
-  component: () => JSX.Element,
+  component: () => JSX.Element;
 };
 
 const PrivateRoute: React.FunctionComponent<any> = ({ component: Component, ...rest }) => {
@@ -15,7 +15,7 @@ const PrivateRoute: React.FunctionComponent<any> = ({ component: Component, ...r
 
   React.useEffect(() => {
     if (!token) history.push(redirect);
-  }, [history, token]);
+  });
 
   return (
     <Route
