@@ -1,4 +1,5 @@
 import { Store } from 'undux';
+import {client} from '@graphql/client'
 
 export type TokenState = { token?: string };
 
@@ -13,7 +14,9 @@ export class TokenService {
 
   public static effects() {
     this.store.on('token').subscribe(async token => {
-      localStorage.setItem('token', token);
+      if (token) localStorage.setItem('token', token);
+      if (!token) localStorage.removeItem('token');
+      if (!token) client.resetStore();
     })
 
     return this.store;

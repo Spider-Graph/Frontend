@@ -9,7 +9,9 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+import { StoreService } from '@services/store.service';
+
+const useStyles = makeStyles((theme) => ({
   error: {
     backgroundColor: theme.palette.error.light,
   },
@@ -31,14 +33,9 @@ const Error: React.FunctionComponent = () => {
   const classes = useStyles({});
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.up('md'));
-  const [state, setState] = React.useState({
-    open: false,
-    error: '',
-  });
+  const store = StoreService.useStore();
+  const error = store.get('error');
 
-  //TODO: Effects that update error on global state change.
-
-  const { error, open } = state;
   return (
     <Snackbar
       autoHideDuration={2000}
@@ -46,9 +43,8 @@ const Error: React.FunctionComponent = () => {
         vertical: md ? 'bottom' : 'top',
         horizontal: md ? 'left' : 'center',
       }}
-      open={open}
-      onClose={() => setState({ ...state, open: false })}
-    >
+      open={!!error}
+      onClose={() => store.set('error')(null)}>
       <SnackbarContent
         className={classes.error}
         message={
