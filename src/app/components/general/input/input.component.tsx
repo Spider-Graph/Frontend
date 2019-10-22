@@ -22,17 +22,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type InputProps = {
-  className?: string,
-  leadingIcon?: string,
-  trailingIcon?: string,
-  elevation?: number,
-  disabled?: boolean,
-  placeholder?: string,
-  style?: React.CSSProperties,
-  type?: string,
-  value: string,
-  onChange: (value: string) => void,
-  ariaLabel?: string,
+  className?: string;
+  leadingIcon?: string;
+  trailingIcon?: string;
+  elevation?: number;
+  disabled?: boolean;
+  placeholder?: string;
+  style?: React.CSSProperties;
+  type?: string;
+  value: string;
+  onChange: (value: string) => void;
+  ariaLabel?: string;
 };
 
 const Input: React.FunctionComponent<InputProps> = ({

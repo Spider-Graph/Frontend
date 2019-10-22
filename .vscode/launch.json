@@ -19,7 +19,7 @@
 
       "sourceMaps": true,
       "sourceMapPathOverrides": {
-        "webpack:/*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/*",
       }
     }
   ]
