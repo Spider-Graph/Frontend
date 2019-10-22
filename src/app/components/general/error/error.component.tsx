@@ -11,7 +11,7 @@ import {
 
 import { StoreService } from '@services/store.service';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   error: {
     backgroundColor: theme.palette.error.light,
   },
@@ -35,6 +35,16 @@ const Error: React.FunctionComponent = () => {
   const md = useMediaQuery(theme.breakpoints.up('md'));
   const store = StoreService.useStore();
   const error = store.get('error');
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (error) setOpen(true);
+  }, [error]);
+
+  const removeError = () => {
+    setOpen(false);
+    setTimeout(() => store.set('error')(null), 200);
+  };
 
   return (
     <Snackbar
@@ -43,8 +53,9 @@ const Error: React.FunctionComponent = () => {
         vertical: md ? 'bottom' : 'top',
         horizontal: md ? 'left' : 'center',
       }}
-      open={!!error}
-      onClose={() => store.set('error')(null)}>
+      open={open}
+      onClose={() => removeError()}
+    >
       <SnackbarContent
         className={classes.error}
         message={
