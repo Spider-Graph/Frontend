@@ -8,6 +8,7 @@ import { CssBaseline } from '@material-ui/core';
 import { Theme } from '@theme/config.theme';
 import { StoreService } from '@services/store.service';
 import { client } from '@graphql/client';
+import { Error } from '@components/general/error/error.component';
 import { PrivateRoute } from '@components/general/private-route/private-route.component';
 
 import { ChartPage } from '@pages/chart.page';
@@ -34,6 +35,8 @@ const App: React.FunctionComponent = () => (
           </Switch>
         </BrowserRouter>
       </ApolloProvider>
+
+      <Error />
     </StoreService.Container>
   </ThemeProvider>
 );
