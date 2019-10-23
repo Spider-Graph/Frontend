@@ -8,7 +8,6 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     top: 'auto',
     bottom: 0,
-    backgroundColor: theme.palette.primary.main,
     clipPath: circleInsetBar,
     [theme.breakpoints.up('md')]: {
       position: 'relative',
@@ -31,7 +30,7 @@ const NavBar: React.FunctionComponent<NavBarProps> = ({ onMenu, onShare }) => {
   const classes = useStyles({});
   return (
     <>
-      <AppBar position="fixed" color="primary" className={classes.appBar}>
+      <AppBar position="fixed" color="secondary" className={classes.appBar}>
         <Toolbar>
           <IconButton color="inherit" onClick={onMenu} aria-label="menu">
             <Icon>menu</Icon>

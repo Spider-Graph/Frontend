@@ -31,7 +31,7 @@ const ChartList: React.FunctionComponent = () => {
         <Button
           className={classes.category}
           key={chart.id}
-          color={selected === chart.id ? 'secondary' : 'default'}
+          color={selected === chart.id ? 'primary' : 'default'}
           variant={selected === chart.id ? 'contained' : 'text'}
           onClick={() => store.set('chart')(selected === chart.id ? null : chart.id)}
         >
