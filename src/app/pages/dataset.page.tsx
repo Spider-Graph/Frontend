@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
 
-import { ChartLabels, ChartLabelsVariables, CHART_LABELS } from '@graphql/queries';
+import { ChartData, ChartDataVariables, CHART_DATA } from '@graphql/queries';
 import { Dataset, DatasetVariables, DATASET } from '@graphql/queries';
 import { Input } from '@components/general/input/input.component';
 import { StoreService } from '@services/store.service';
@@ -34,17 +34,17 @@ const DatasetPage: React.FunctionComponent = () => {
   const classes = useStyles({});
   const history = useHistory();
   // const { id } = useParams();
-  // const store = StoreService.useStore();
-  // const chart = store.get('chart');
-  const id = 'faab64e0-f5ab-11e9-8c05-7f331b982233';
-  const chart = 'ca063dd0-f3ce-11e9-ae6e-171e9b0f4907';
+  const store = StoreService.useStore();
+  const chart = store.get('chart');
+  const id = '';
+  // const chart = 'ca063dd0-f3ce-11e9-ae6e-171e9b0f4907';
 
   const [dataset, setDataset] = React.useState<ChangeDatasetDTO>({ label: '', data: [] });
 
   const [addDataset, addDatasetResponse] = useMutation<AddDataset, AddDatasetVariables>(
     ADD_DATASET
   );
-  const chartLabelsResponse = useQuery<ChartLabels, ChartLabelsVariables>(CHART_LABELS, {
+  const chartDataResponse = useQuery<ChartData, ChartDataVariables>(CHART_DATA, {
     variables: { id: chart },
   });
   const datasetResponse = useQuery<Dataset, DatasetVariables>(DATASET, {
@@ -52,10 +52,15 @@ const DatasetPage: React.FunctionComponent = () => {
   });
 
   React.useEffect(() => {
-    if (datasetResponse.loading) return;
-    const { data, label } = datasetResponse.data.dataset;
-    setDataset({ data, label });
-  }, [setDataset, datasetResponse]);
+    if (datasetResponse.data) {
+      const { data, label } = datasetResponse.data.dataset;
+      setDataset({ data, label });
+    } else if (chartDataResponse.data) {
+      const data = new Array<number>(chartDataResponse.data.chart.labels.length);
+      data.fill(0);
+      setDataset({ ...dataset, data });
+    }
+  }, [setDataset, datasetResponse, chartDataResponse]);
 
   React.useEffect(() => {
     if (!addDatasetResponse.data) return;
@@ -84,8 +89,8 @@ const DatasetPage: React.FunctionComponent = () => {
     handleChange('data')(newData);
   };
 
-  if (chartLabelsResponse.loading || datasetResponse.loading) return <> </>;
-  const { labels } = chartLabelsResponse.data.chart;
+  if (chartDataResponse.loading || datasetResponse.loading) return <> </>;
+  const { labels } = chartDataResponse.data.chart;
   console.log(dataset.data);
   return (
     <div className={classes.root}>
