@@ -45,7 +45,6 @@ const MainPage: React.FunctionComponent = () => {
       {id && <ChartDisplay id={id} />}
       <SpeedDial
         className={classes.speedDial}
-        FabProps={{ color: 'secondary' }}
         open={speedDial}
         onOpen={() => setSpeedDial(true)}
         onClose={() => setSpeedDial(false)}
