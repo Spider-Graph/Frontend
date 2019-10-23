@@ -49,13 +49,11 @@ const UserForm: React.FunctionComponent<UserFormProps> = ({
   const classes = useStyles({});
   const [user, setUser] = React.useState({ username: '', email: '', password: '' });
 
-  const handleChange = (key: string) => {
-    return (value: string) => {
-      setUser({
-        ...user,
-        [key]: value,
-      });
-    };
+  const handleChange = (key: string) => (value: string) => {
+    setUser({
+      ...user,
+      [key]: value,
+    });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

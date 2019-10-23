@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     padding: '2px 4px',
     display: 'flex',
-    marginTop: 15,
+    margin: 16,
     height: 56,
   },
   padding: {
@@ -41,8 +41,8 @@ type InputProps = {
   required?: boolean;
   style?: React.CSSProperties;
   type?: string;
-  value?: string;
-  onChange?: (value: string) => void;
+  value?: string | number;
+  onChange?: (value: string | number) => void;
   onClick?: () => void;
   ariaLabel?: string;
 };
@@ -66,7 +66,9 @@ const Input: React.FunctionComponent<InputProps> = ({
   const classes = useStyles({ label, leadingIcon });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
+    const change = typeof value === 'number' && !e.target.value ? '0' : e.target.value;
+    const typedChange = typeof value === 'number' ? parseFloat(change) : change;
+    if (onChange) onChange(typedChange);
   };
 
   return (
