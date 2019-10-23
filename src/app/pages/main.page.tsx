@@ -11,7 +11,7 @@ import { NavDrawer } from '@components/nav/drawer/drawer.component';
 
 const useStyles = makeStyles(theme => ({
   speedDial: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: 28,
     right: 20,
     [theme.breakpoints.up('sm')]: {
@@ -34,6 +34,10 @@ const MainPage: React.FunctionComponent = () => {
     { icon: <Icon>bar_chart</Icon>, name: 'Add Dataset', link: '/dataset' },
     { icon: <Icon>pie_chart</Icon>, name: 'Add Chart', link: '/chart' },
   ];
+
+  React.useEffect(() => {
+    setNav(false);
+  }, [id]);
 
   return (
     <>

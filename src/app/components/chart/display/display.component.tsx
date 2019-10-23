@@ -2,28 +2,30 @@ import React from 'react';
 import { useQuery } from 'react-apollo';
 import { Radar } from 'react-chartjs-2';
 
-import { Typography, makeStyles } from '@material-ui/core';
+import { CircularProgress, Typography, makeStyles } from '@material-ui/core';
 
 import { Chart, ChartVariables, CHART } from '@graphql/queries';
 import { getRandomColor } from '@utils/randomColorMaker';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    margin: theme.spacing(3),
+    height: 'calc(100vh - 64px)',
+    padding: theme.spacing(3),
   },
   chart: {
     width: '100%',
-    maxWidth: '600px',
+    maxWidth: '500px',
   },
   layout: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    alignItems: 'center',
     [theme.breakpoints.up('md')]: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
+      height: `calc(100% - ${theme.spacing(3)}px)`,
     },
   },
 }));
@@ -36,15 +38,15 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
   const classes = useStyles({});
 
   const query = useQuery<Chart, ChartVariables>(CHART, { variables: { id } });
-  if (query.loading || !query.data) return <> </>;
-  const { labels, title } = query.data.chart;
-  console.log(query);
+  if (query.loading) return <CircularProgress />;
 
   const allDatasets = query.data.chart.datasets.map(dataset => ({
     ...dataset,
     backgroundColor: getRandomColor(dataset.label),
     enabled: true,
   }));
+
+  const { labels, title } = query.data.chart;
   const datasets = allDatasets.filter(dataset => dataset.enabled);
   return (
     <div className={classes.root}>
@@ -53,7 +55,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
         <div className={classes.chart}>
           <Radar
             width={500}
-            height={400}
+            height={500}
             data={{ labels, datasets }}
             legend={{ display: false }}
             options={{
