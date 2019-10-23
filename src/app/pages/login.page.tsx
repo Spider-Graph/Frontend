@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { CircularProgress, makeStyles } from '@material-ui/core';
 
 import { CredentialsDTO, UserDetailsDTO } from '@models/api';
-import { StoreService } from '@services/store.service';
+import { useUndux } from '@hooks/useUndux';
 import { Login, LOGIN, Register, REGISTER } from '@graphql/mutations';
 import { UserForm } from '@components/user/form/form.component';
 
@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
 const LoginPage: React.FunctionComponent = () => {
   const classes = useStyles({});
   const history = useHistory();
-  const store = StoreService.useStore();
-  const token = store.get('token');
+  const [token, setToken] = useUndux('token');
+  const [error, setError] = useUndux('error');
   const [login, loginResponse] = useMutation<Login, CredentialsDTO>(LOGIN);
   const [register, registerResponse] = useMutation<Register, UserDetailsDTO>(REGISTER);
 
@@ -35,18 +35,18 @@ const LoginPage: React.FunctionComponent = () => {
   });
 
   React.useEffect(() => {
-    if (registerResponse.data) store.set('token')(registerResponse.data.register.token);
+    if (registerResponse.data) setToken(registerResponse.data.register.token);
     if (registerResponse.data) loginResponse.data = undefined;
 
-    if (registerResponse.error) store.set('error')(registerResponse.error.message);
+    if (registerResponse.error) setError(registerResponse.error.message);
     if (registerResponse.error) registerResponse.error = undefined;
   });
 
   React.useEffect(() => {
-    if (loginResponse.data) store.set('token')(loginResponse.data.login.token);
+    if (loginResponse.data) setToken(loginResponse.data.login.token);
     if (loginResponse.data) loginResponse.data = undefined;
 
-    if (loginResponse.error) store.set('error')(loginResponse.error.message);
+    if (loginResponse.error) setError(loginResponse.error.message);
     if (loginResponse.error) loginResponse.error = undefined;
   });
 
