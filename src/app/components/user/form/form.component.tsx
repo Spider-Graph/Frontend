@@ -96,7 +96,7 @@ const UserForm: React.FunctionComponent<UserFormProps> = ({
         />
         <Button
           className={classes.button}
-          color={buttonColor || 'secondary'}
+          color={buttonColor || 'primary'}
           variant="contained"
           type="submit"
         >

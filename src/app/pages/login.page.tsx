@@ -12,7 +12,7 @@ import { UserForm } from '@components/user/form/form.component';
 const useStyles = makeStyles(theme => ({
   root: {
     height: '100vh',
-    backgroundColor: theme.palette.primary['main'],
+    backgroundColor: theme.palette.secondary.main,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
