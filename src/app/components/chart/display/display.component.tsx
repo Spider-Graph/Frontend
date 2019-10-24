@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   chart: {
-    width: `calc(100vw - ${theme.spacing(1)}px)`,
+    width: `calc(100vw - ${theme.spacing(2)}px)`,
     maxWidth: 500,
   },
   layout: {
@@ -114,8 +114,8 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
           <div className={classes.layout}>
             <div id="chartjs" className={classes.chart}>
               <Radar
-                width={500}
-                height={500}
+                width={480}
+                height={480}
                 data={{ labels, datasets }}
                 legend={{ display: false }}
                 options={{
