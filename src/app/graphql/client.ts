@@ -2,7 +2,7 @@ import ApolloClient from 'apollo-boost';
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_API_LINK,
-  request: operation => {
+  request: (operation) => {
     const token = localStorage.getItem('token');
     operation.setContext({
       headers: {

@@ -7,7 +7,7 @@ interface StyleProps {
   leadingIcon: string;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: '2px 4px',
     display: 'flex',

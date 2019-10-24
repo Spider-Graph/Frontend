@@ -5,7 +5,7 @@ import { FormGroup, Button, PropTypes, makeStyles } from '@material-ui/core';
 import { UserDetailsDTO } from '@models/api/user.dto';
 import { Input } from '@components/general/input/input.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '35vw',
     minWidth: 300,
@@ -92,12 +92,7 @@ const UserForm: React.FunctionComponent<UserFormProps> = ({
           onChange={handleChange('password')}
           ariaLabel="password"
         />
-        <Button
-          className={classes.button}
-          color={buttonColor || 'primary'}
-          variant="contained"
-          type="submit"
-        >
+        <Button className={classes.button} color={buttonColor || 'primary'} variant="contained" type="submit">
           {button}
         </Button>
         {link && linkLabel && (

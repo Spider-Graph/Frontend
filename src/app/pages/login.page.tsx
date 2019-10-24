@@ -9,7 +9,7 @@ import { useUndux } from '@hooks/useUndux';
 import { Login, LOGIN, Register, REGISTER } from '@graphql/mutations';
 import { UserForm } from '@components/user/form/form.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
     backgroundColor: theme.palette.secondary.main,
@@ -22,11 +22,11 @@ const useStyles = makeStyles(theme => ({
 const LoginPage: React.FunctionComponent = () => {
   const classes = useStyles({});
   const history = useHistory();
-  const [token, setToken] = useUndux('token');
-  const [error, setError] = useUndux('error');
   const [login, loginResponse] = useMutation<Login, CredentialsDTO>(LOGIN);
   const [register, registerResponse] = useMutation<Register, UserDetailsDTO>(REGISTER);
 
+  const [token, setToken] = useUndux('token');
+  const [, setError] = useUndux('error');
   const [state, setState] = React.useState({
     action: login || register,
     button: 'LOGIN',

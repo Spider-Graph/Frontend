@@ -4,9 +4,9 @@ import { useQuery } from '@apollo/react-hooks';
 import { Me, ME } from '@graphql/queries';
 import { Button, CircularProgress, Typography, makeStyles } from '@material-ui/core';
 
-import { StoreService } from '@services/store.service';
+import { useUndux } from '@hooks/useUndux';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -33,11 +33,11 @@ const useStyles = makeStyles(theme => ({
 
 const UserSwitcher: React.FunctionComponent = () => {
   const classes = useStyles({});
-  const store = StoreService.useStore();
+  const [, setToken] = useUndux('token');
   const { loading, data } = useQuery<Me, null>(ME);
 
   const handleSignOut = () => {
-    store.set('token')(null);
+    setToken(null);
   };
 
   return (

@@ -4,12 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { Icon, makeStyles } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 
-import { StoreService } from '@services/store.service';
+import { useUndux } from '@hooks/useUndux';
 import { ChartDisplay } from '@components/chart/display/display.component';
 import { NavBar } from '@components/nav/bar/bar.component';
 import { NavDrawer } from '@components/nav/drawer/drawer.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   speedDial: {
     position: 'fixed',
     bottom: 28,
@@ -23,21 +23,32 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+interface Action {
+  icon: JSX.Element;
+  name: string;
+  link: string;
+  chartRequired: boolean;
+}
+
 const MainPage: React.FunctionComponent = () => {
   const classes = useStyles({});
   const history = useHistory();
-  const store = StoreService.useStore();
-  const id = store.get('chart');
+
+  const [id] = useUndux('chart');
   const [nav, setNav] = React.useState(false);
   const [speedDial, setSpeedDial] = React.useState(false);
-  const actions = [
-    { icon: <Icon>bar_chart</Icon>, name: 'Add Dataset', link: '/dataset' },
-    { icon: <Icon>pie_chart</Icon>, name: 'Add Chart', link: '/chart' },
-  ];
+
+  const [actions, setActions] = React.useState<Action[]>([]);
+  const [availableActions] = React.useState<Action[]>([
+    { icon: <Icon>bar_chart</Icon>, name: 'Add Dataset', link: '/dataset', chartRequired: true },
+    { icon: <Icon>pie_chart</Icon>, name: 'Add Chart', link: '/chart', chartRequired: false },
+  ]);
 
   React.useEffect(() => {
+    if (id) setActions(availableActions);
+    else setActions(availableActions.filter((action) => !action.chartRequired));
     setNav(false);
-  }, [id]);
+  }, [availableActions, setActions, id]);
 
   return (
     <>
@@ -51,7 +62,7 @@ const MainPage: React.FunctionComponent = () => {
         icon={<SpeedDialIcon />}
         ariaLabel="Add"
       >
-        {actions.map(action => (
+        {actions.map((action) => (
           <SpeedDialAction
             key={action.name}
             onClick={() => history.push(action.link)}
