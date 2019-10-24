@@ -98,9 +98,9 @@ const DatasetPage: React.FunctionComponent = () => {
         <Input label="Label" value={dataset.label} onChange={handleChange('label')} />
         <Typography variant="overline">Values</Typography>
         {dataset.data.length !== 0 &&
-          labels.map((item, i) => {
-            return <Input key={i} label={item} type="number" value={dataset.data[i]} onChange={setData(i)} />;
-          })}
+          labels.map((item, i) => (
+            <Input key={i} label={item} type="number" value={dataset.data[i]} onChange={setData(i)} />
+          ))}
       </form>
       <div className={classes.bottomRow}>
         <IconButton color="inherit" onClick={() => history.goBack()}>

@@ -12,7 +12,7 @@ export interface UpdateDatasetVariables {
 }
 
 export const UPDATE_DATASET = gql`
-  mutation UpdateDataset($chart: String!, $id: string, $dataset: ChangeDataset!) {
+  mutation UpdateDataset($chart: String!, $id: String!, $dataset: ChangeDataset!) {
     updateDataset(chart: $chart, id: $id, dataset: $dataset) {
       completed
     }
