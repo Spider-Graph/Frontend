@@ -5,8 +5,10 @@ import { Radar } from 'react-chartjs-2';
 
 import { CircularProgress, Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
 
-import { Chart, ChartVariables, CHART } from '@graphql/queries';
+import { DatasetUI } from '@models/DatasetUI';
 import { getRandomColor } from '@utils/randomColorMaker';
+import { Chart, ChartVariables, CHART } from '@graphql/queries';
+import { ChartDatasets } from '@components/chart/datasets/datasets.component';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,19 +43,25 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
   const history = useHistory();
 
   const { data, loading, refetch } = useQuery<Chart, ChartVariables>(CHART, { variables: { id } });
+  const [allDatasets, setAllDatasets] = React.useState<DatasetUI[]>([]);
 
   React.useEffect(() => {
     refetch();
   }, [refetch]);
 
+  React.useEffect(() => {
+    if (!data) return;
+    setAllDatasets(
+      data.chart.datasets.map((dataset) => ({
+        ...dataset,
+        backgroundColor: getRandomColor(dataset.label),
+        enabled: true,
+      }))
+    );
+  }, [data, setAllDatasets]);
+
   if (loading) return <CircularProgress />;
   if (!data) return <></>;
-
-  const allDatasets = data.chart.datasets.map((dataset) => ({
-    ...dataset,
-    backgroundColor: getRandomColor(dataset.label),
-    enabled: true,
-  }));
 
   const { labels, title } = data.chart;
   const datasets = allDatasets.filter((dataset) => dataset.enabled);
@@ -88,7 +96,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
             }}
           />
         </div>
-        <div></div>
+        <ChartDatasets datasets={allDatasets} onChange={setAllDatasets} />
       </div>
     </div>
   );

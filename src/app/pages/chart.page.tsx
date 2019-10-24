@@ -94,18 +94,16 @@ const ChartPage: React.FunctionComponent = () => {
         <IconButton color="inherit" onClick={() => addLabel()}>
           <Icon>add_circle_outline</Icon>
         </IconButton>
-        {chart.labels.map((item, i) => {
-          return (
-            <Input
-              key={i}
-              label={`Label ${i + 1}`}
-              trailingIcon="remove"
-              value={item}
-              onChange={setLabel(i)}
-              onClick={() => removeLabel(i)}
-            />
-          );
-        })}
+        {chart.labels.map((item, i) => (
+          <Input
+            key={i}
+            label={`Label ${i + 1}`}
+            trailingIcon="remove"
+            value={item}
+            onChange={setLabel(i)}
+            onClick={() => removeLabel(i)}
+          />
+        ))}
       </form>
       <div className={classes.bottomRow}>
         <IconButton color="inherit" onClick={() => history.goBack()}>
