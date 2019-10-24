@@ -67,7 +67,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
   const chart = useQuery<Chart, ChartVariables>(CHART, {
     variables: { id },
     skip: !id,
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
   });
 
   const [, setTitle] = useUndux('title');
@@ -109,7 +109,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
         </div>
       </Fade>
 
-      <Fade in={!!chart.data}>
+      <Fade in={!!datasets}>
         <div className={classes.content}>
           <div className={classes.layout}>
             <div id="chartjs" className={classes.chart}>
