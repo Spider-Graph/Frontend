@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: '2px 4px',
     display: 'flex',
-    margin: 16,
+    margin: theme.spacing(2),
     height: 64,
   },
   padding: {
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   input: ({ label, leadingIcon }: StyleProps) => ({
-    marginTop: label ? -13 : 0,
-    marginLeft: !leadingIcon ? 10 : 0,
+    marginTop: label ? theme.spacing(1.5) * -1 : 0,
+    marginLeft: !leadingIcon ? theme.spacing(2) : 0,
     flex: 1,
   }),
   icon: {
@@ -66,9 +66,8 @@ const Input: React.FunctionComponent<InputProps> = ({
   const classes = useStyles({ label, leadingIcon });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const change = typeof value === 'number' && !e.target.value ? '0' : e.target.value;
-    const typedChange = typeof value === 'number' ? parseFloat(change) : change;
-    if (onChange) onChange(typedChange);
+    const change: string | number = e.target.valueAsNumber || e.target.value;
+    if (onChange) onChange(change);
   };
 
   return (

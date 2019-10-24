@@ -11,15 +11,21 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 10,
+    margin: theme.spacing(2),
     marginTop: 0,
     [theme.breakpoints.up('md')]: {
       flexDirection: 'column',
       alignItems: 'start',
     },
   },
+  loading: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    margin: theme.spacing(2),
+  },
   user: {
-    marginBottom: 10,
+    marginBottom: theme.spacing(1),
     [theme.breakpoints.up('md')]: {
       width: '100%',
     },
@@ -44,18 +50,23 @@ const UserSwitcher: React.FunctionComponent<UserSwitcherProps> = ({ me }) => {
     setToken(null);
   };
 
+  if (loading)
+    return (
+      <div className={classes.loading}>
+        <CircularProgress />
+      </div>
+    );
+
   return (
     <section className={classes.root}>
-      {(loading && <CircularProgress />) || (
-        <div className={classes.user}>
-          <Typography component="h4" variant="h5">
-            {data && data.me.username}
-          </Typography>
-          <Typography component="span" variant="subtitle2" gutterBottom>
-            {data && data.me.email}
-          </Typography>
-        </div>
-      )}
+      <div className={classes.user}>
+        <Typography component="h4" variant="h5">
+          {data && data.me.username}
+        </Typography>
+        <Typography component="span" variant="subtitle2" gutterBottom>
+          {data && data.me.email}
+        </Typography>
+      </div>
 
       <Button className={classes.signout} onClick={handleSignOut}>
         Sign Out

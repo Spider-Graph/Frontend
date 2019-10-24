@@ -6,7 +6,7 @@ import { useUndux } from '@hooks/useUndux';
 
 const useStyles = makeStyles((theme) => ({
   error: {
-    backgroundColor: theme.palette.error.light,
+    backgroundColor: theme.palette.error.main,
   },
   icon: {
     fontSize: 20,
@@ -35,12 +35,12 @@ const Error: React.FunctionComponent = () => {
 
   const removeError = () => {
     setOpen(false);
-    setTimeout(() => setError(null), 200);
+    setTimeout(() => setError(null), 400);
   };
 
   return (
     <Snackbar
-      autoHideDuration={2000}
+      autoHideDuration={4000}
       anchorOrigin={{
         vertical: md ? 'bottom' : 'top',
         horizontal: md ? 'left' : 'center',

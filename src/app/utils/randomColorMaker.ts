@@ -15,15 +15,15 @@ const getRandomColor = (seed: string) => {
   const randomNumber = Math.floor(rng() * 5);
   switch (randomNumber) {
     case 0:
-      return convertHex(green['500'], 30);
+      return convertHex(green['800'], 60);
     case 1:
-      return convertHex(indigo['500'], 30);
+      return convertHex(indigo['800'], 60);
     case 2:
-      return convertHex(deepPurple['500'], 30);
+      return convertHex(deepPurple['800'], 60);
     case 3:
-      return convertHex(deepOrange['500'], 30);
+      return convertHex(deepOrange['800'], 60);
     case 4:
-      return convertHex(blueGrey['500'], 30);
+      return convertHex(blueGrey['800'], 60);
   }
 };
 export { getRandomColor };

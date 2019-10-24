@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 
-import { CircularProgress, makeStyles } from '@material-ui/core';
+import { CircularProgress, Fade, makeStyles } from '@material-ui/core';
 
 import { CredentialsDTO, UserDetailsDTO } from '@models/api';
 import { useUndux } from '@hooks/useUndux';
@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loading: {
+    position: 'absolute',
   },
 }));
 
@@ -51,7 +54,7 @@ const LoginPage: React.FunctionComponent = () => {
   });
 
   React.useEffect(() => {
-    if (token) history.push('/');
+    if (token) setTimeout(() => history.push('/'), 800);
   });
 
   const handleLink = () => {
@@ -72,19 +75,26 @@ const LoginPage: React.FunctionComponent = () => {
   const { button, email, linkLabel } = state;
   const loading = loginResponse.loading || registerResponse.loading;
   return (
-    <div className={classes.root}>
-      {loading && <CircularProgress color="secondary" />}
-      {!loading && (
-        <UserForm
-          button={button}
-          email={email}
-          link
-          linkLabel={linkLabel}
-          onLink={handleLink}
-          onSubmit={handleSubmit}
-        />
-      )}
-    </div>
+    <Fade in={!token}>
+      <div className={classes.root}>
+        <Fade in={loading}>
+          <CircularProgress className={classes.loading} />
+        </Fade>
+
+        <Fade in={!loading && !token}>
+          <div>
+            <UserForm
+              button={button}
+              email={email}
+              link
+              linkLabel={linkLabel}
+              onLink={handleLink}
+              onSubmit={handleSubmit}
+            />
+          </div>
+        </Fade>
+      </div>
+    </Fade>
   );
 };
 

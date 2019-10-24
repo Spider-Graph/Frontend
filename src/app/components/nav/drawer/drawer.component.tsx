@@ -9,13 +9,13 @@ import { Me, ME } from '@graphql/queries';
 import { ChartList } from '@components/chart/list/list.component';
 import { UserSwitcher } from '@components/user/switcher/switcher.component';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   drawer: {
-    padding: 10,
+    padding: theme.spacing(1),
     minWidth: '260px',
   },
   divider: {},
-});
+}));
 
 interface NavDrawerProps {
   open: boolean;
@@ -27,8 +27,8 @@ const NavDrawer: React.FunctionComponent<NavDrawerProps> = ({ open, onClose }) =
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.up('md'));
 
-  const charts = useQuery<Charts, null>(CHARTS);
-  const me = useQuery<Me, null>(ME);
+  const charts = useQuery<Charts, null>(CHARTS, { fetchPolicy: 'network-only' });
+  const me = useQuery<Me, null>(ME, { fetchPolicy: 'network-only' });
 
   return (
     <Drawer anchor={md ? 'left' : 'bottom'} open={open} onClose={onClose}>
