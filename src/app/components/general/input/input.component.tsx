@@ -66,7 +66,7 @@ const Input: React.FunctionComponent<InputProps> = ({
   const classes = useStyles({ label, leadingIcon });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const change: string | number = e.target.valueAsNumber || e.target.value;
+    const change: string | number = type === 'number' ? e.target.valueAsNumber : e.target.value;
     if (onChange) onChange(change);
   };
 
