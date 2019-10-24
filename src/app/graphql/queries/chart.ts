@@ -16,6 +16,7 @@ export const CHART = gql`
       title
       labels
       datasets {
+        id
         label
         data
       }
