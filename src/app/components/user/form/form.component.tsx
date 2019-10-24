@@ -7,20 +7,20 @@ import { Input } from '@components/general/input/input.component';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '35vw',
+    width: '100vw',
     minWidth: 300,
     maxWidth: 500,
-    padding: 10,
+    padding: theme.spacing(2),
   },
   button: {
     marginTop: 40,
-    marginBottom: 20,
+    marginBottom: theme.spacing(4),
     marginRight: 'auto',
     marginLeft: 'auto',
   },
   link: {
     color: 'white',
-    margin: 10,
+    margin: theme.spacing(2),
     marginRight: 'auto',
     marginLeft: 'auto',
     textDecoration: 'none',

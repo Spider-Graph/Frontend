@@ -12,6 +12,9 @@ export interface DeleteChartVariables {
 export const DELETE_CHART = gql`
   mutation AddChart($id: String!) {
     deleteChart(id: $id) {
+      chart {
+        id
+      }
       completed
     }
   }

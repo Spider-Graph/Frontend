@@ -15,18 +15,41 @@ const useStyles = makeStyles((theme) => ({
   root: {
     color: theme.palette.secondary.contrastText,
     backgroundColor: theme.palette.secondary.main,
-    height: '100vh',
-    width: '100vw',
-  },
-  bottomRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    bottom: 0,
+    height: '100%',
+    minHeight: '100vh',
     width: '100vw',
   },
   form: {
-    padding: 10,
+    padding: theme.spacing(1),
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    marginBottom: theme.spacing(9),
+  },
+  spacer: {
+    flex: 1,
+  },
+  labelsOverline: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  addIcon: {
+    marginRight: theme.spacing(2),
+  },
+  bottomRow: {
+    backgroundColor: theme.palette.secondary.main,
+    height: theme.spacing(9),
+    position: 'fixed',
+    display: 'flex',
+    justifyContent: 'space-between',
+    bottom: 0,
+    width: '100vw',
+  },
+  icon: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
   },
 }));
 
@@ -34,9 +57,10 @@ const ChartPage: React.FunctionComponent = () => {
   const classes = useStyles({});
   const history = useHistory();
   const { id } = useParams();
-  const [, setID] = useUndux('chart');
 
   const [chart, setChart] = React.useState<ChangeChartDTO>({ title: '', labels: ['', '', ''] });
+  const [, setID] = useUndux('chart');
+  const [, setError] = useUndux('error');
 
   const [addChart, addChartResponse] = useMutation<AddChart, AddChartVariables>(ADD_CHART);
   const [updateChart, updateChartResponse] = useMutation<UpdateChart, UpdateChartVariables>(UPDATE_CHART);
@@ -56,6 +80,23 @@ const ChartPage: React.FunctionComponent = () => {
     if (addedChart) history.goBack();
     if (updatedChart) history.goBack();
   }, [history, setID, addChartResponse, updateChartResponse]);
+
+  React.useEffect(() => {
+    if (addChartResponse.error) {
+      setError(addChartResponse.error.message);
+      addChartResponse.error = undefined;
+    }
+
+    if (updateChartResponse.error) {
+      setError(updateChartResponse.error.message);
+      updateChartResponse.error = undefined;
+    }
+
+    if (chartDataResponse.error) {
+      setError(chartDataResponse.error.message);
+      chartDataResponse.error = undefined;
+    }
+  }, [addChartResponse, updateChartResponse, chartDataResponse, setError]);
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
@@ -90,10 +131,12 @@ const ChartPage: React.FunctionComponent = () => {
       <form className={classes.form} onSubmit={handleSubmit}>
         <Typography variant="overline">Chart</Typography>
         <Input label="Title" value={chart.title} onChange={handleChange('title')} />
-        <Typography variant="overline">Labels</Typography>
-        <IconButton color="inherit" onClick={() => addLabel()}>
-          <Icon>add_circle_outline</Icon>
-        </IconButton>
+        <div className={classes.labelsOverline}>
+          <Typography variant="overline">Labels</Typography>
+          <IconButton className={classes.addIcon} color="inherit" onClick={() => addLabel()}>
+            <Icon>add_circle_outline</Icon>
+          </IconButton>
+        </div>
         {chart.labels.map((item, i) => (
           <Input
             key={i}
@@ -106,12 +149,16 @@ const ChartPage: React.FunctionComponent = () => {
         ))}
       </form>
       <div className={classes.bottomRow}>
-        <IconButton color="inherit" onClick={() => history.goBack()}>
-          <Icon>arrow_back</Icon>
-        </IconButton>
-        <IconButton color="inherit" onClick={() => handleSubmit()}>
-          <Icon>library_add</Icon>
-        </IconButton>
+        <div className={classes.icon}>
+          <IconButton color="inherit" onClick={() => history.goBack()}>
+            <Icon>arrow_back</Icon>
+          </IconButton>
+        </div>
+        <div className={classes.icon}>
+          <IconButton color="inherit" onClick={() => handleSubmit()}>
+            <Icon>library_add</Icon>
+          </IconButton>
+        </div>
       </div>
     </div>
   );

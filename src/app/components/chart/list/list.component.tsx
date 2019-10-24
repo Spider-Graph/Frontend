@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryResult } from '@apollo/react-common';
 import { useMutation } from '@apollo/react-hooks';
 
-import { Paper, CircularProgress, Icon, Typography, makeStyles } from '@material-ui/core';
+import { CircularProgress, Icon, Paper, Typography, makeStyles } from '@material-ui/core';
 
 import { useUndux } from '@hooks/useUndux';
 import { DeleteChart, DeleteChartVariables, DELETE_CHART } from '@graphql/mutations';
@@ -12,7 +12,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    margin: 10,
+    margin: theme.spacing(2),
+  },
+  loading: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
   },
   item: {
     color: theme.palette.text.secondary,
@@ -20,9 +26,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 40,
-    marginBottom: 10,
-    paddingLeft: 15,
-    paddingRight: 15,
+    marginBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
   },
   selected: {
     backgroundColor: theme.palette.primary.main,
@@ -43,19 +49,43 @@ interface ChartListProps {
 
 const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
   const classes = useStyles({});
+
   const [selected, setSelected] = useUndux('chart');
+  const [, setError] = useUndux('error');
+
   const [deleteChart, deleteChartResponse] = useMutation<DeleteChart, DeleteChartVariables>(DELETE_CHART);
-  const { data, loading, refetch } = charts;
 
   React.useEffect(() => {
-    refetch();
-  }, [deleteChartResponse, refetch]);
+    if (deleteChartResponse.data) {
+      if (deleteChartResponse.data.deleteChart.chart.id === selected) setSelected(null);
+      charts.refetch();
+    }
+  }, [charts, selected, setSelected, deleteChartResponse]);
 
-  if (loading) return <CircularProgress />;
+  React.useEffect(() => {
+    if (deleteChartResponse.error) {
+      setError(deleteChartResponse.error.message);
+      deleteChartResponse.error = undefined;
+    }
+
+    if (charts.error) {
+      setError(charts.error.message);
+      charts.error = undefined;
+    }
+  }, [deleteChartResponse, charts, setError]);
+
+  if (charts.loading)
+    return (
+      <div className={classes.loading}>
+        <CircularProgress />
+      </div>
+    );
+
+  if (!charts.data) return <div />;
 
   return (
     <div className={classes.root}>
-      {data.charts.map((chart) => (
+      {charts.data.charts.map((chart) => (
         <Paper
           key={chart.id}
           className={selected === chart.id ? `${classes.item} ${classes.selected}` : classes.item}
@@ -64,7 +94,7 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
           <Typography
             className={selected === chart.id ? `${classes.text} ${classes.selectedText}` : classes.text}
             variant="button"
-            onClick={() => setSelected(selected === chart.id ? null : chart.id)}
+            onClick={() => setSelected(chart.id)}
           >
             {chart.title}
           </Typography>

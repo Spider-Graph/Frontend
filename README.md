@@ -88,7 +88,7 @@ Racecars, RPG Characters, Time Management.
 
 None
 
-### Have you validated the problem and your solution with your target audience? How?
+### Have you validated the problem and your solution with your target audience
 
 None
 

@@ -16,18 +16,34 @@ const useStyles = makeStyles((theme) => ({
   root: {
     color: theme.palette.secondary.contrastText,
     backgroundColor: theme.palette.secondary.main,
-    height: '100vh',
-    width: '100vw',
-  },
-  bottomRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    position: 'absolute',
-    bottom: 0,
+    height: '100%',
+    minHeight: '100vh',
     width: '100vw',
   },
   form: {
-    padding: 10,
+    padding: theme.spacing(1),
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    marginBottom: theme.spacing(9),
+  },
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  },
+  bottomRow: {
+    backgroundColor: theme.palette.secondary.main,
+    height: theme.spacing(9),
+    position: 'fixed',
+    display: 'flex',
+    justifyContent: 'space-between',
+    bottom: 0,
+    width: '100vw',
+  },
+  icon: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
   },
 }));
 
@@ -35,7 +51,9 @@ const DatasetPage: React.FunctionComponent = () => {
   const classes = useStyles({});
   const history = useHistory();
   const { id } = useParams();
+
   const [chart] = useUndux('chart');
+  const [, setError] = useUndux('error');
 
   const [dataset, setDataset] = React.useState<ChangeDatasetDTO>({ label: '', data: [] });
 
@@ -44,10 +62,12 @@ const DatasetPage: React.FunctionComponent = () => {
   const chartDataResponse = useQuery<ChartData, ChartDataVariables>(CHART_DATA, {
     variables: { id: chart },
     skip: !chart,
+    fetchPolicy: 'network-only',
   });
   const datasetResponse = useQuery<Dataset, DatasetVariables>(DATASET, {
     variables: { id: id, chart },
     skip: !id || !chart,
+    fetchPolicy: 'network-only',
   });
 
   React.useEffect(() => {
@@ -56,7 +76,7 @@ const DatasetPage: React.FunctionComponent = () => {
       setDataset({ data, label });
     } else if (chartDataResponse.data) {
       const data = new Array<number>(chartDataResponse.data.chart.labels.length);
-      data.fill(0);
+      data.fill(50);
       setDataset({ data, label: '' });
     }
   }, [chartDataResponse, datasetResponse, setDataset]);
@@ -68,6 +88,23 @@ const DatasetPage: React.FunctionComponent = () => {
     if (addedDataset) history.goBack();
     if (updatedDataset) history.goBack();
   }, [history, addDatasetResponse, updateDatasetResponse]);
+
+  React.useEffect(() => {
+    if (addDatasetResponse.error) {
+      setError(addDatasetResponse.error.message);
+      addDatasetResponse.error = undefined;
+    }
+
+    if (updateDatasetResponse.error) {
+      setError(updateDatasetResponse.error.message);
+      updateDatasetResponse.error = undefined;
+    }
+
+    if (chartDataResponse.error) {
+      setError(chartDataResponse.error.message);
+      chartDataResponse.error = undefined;
+    }
+  }, [addDatasetResponse, updateDatasetResponse, chartDataResponse, setError]);
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
@@ -97,10 +134,12 @@ const DatasetPage: React.FunctionComponent = () => {
         <Typography variant="overline">Dataset</Typography>
         <Input label="Label" value={dataset.label} onChange={handleChange('label')} />
         <Typography variant="overline">Values</Typography>
-        {dataset.data.length !== 0 &&
-          labels.map((item, i) => (
-            <Input key={i} label={item} type="number" value={dataset.data[i]} onChange={setData(i)} />
-          ))}
+        <div className={classes.grid}>
+          {dataset.data.length !== 0 &&
+            labels.map((item, i) => (
+              <Input key={i} label={item} type="number" value={dataset.data[i]} onChange={setData(i)} />
+            ))}
+        </div>
       </form>
       <div className={classes.bottomRow}>
         <IconButton color="inherit" onClick={() => history.goBack()}>
