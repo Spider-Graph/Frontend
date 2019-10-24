@@ -23,7 +23,7 @@ import { Confirm } from '@components/general/confirm/confirm.component';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '95vw',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(11),

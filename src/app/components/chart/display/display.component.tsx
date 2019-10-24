@@ -15,13 +15,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
     paddingTop: theme.spacing(3),
-    paddingRight: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     [theme.breakpoints.up('md')]: {
-      height: `calc(100vh - ${theme.spacing(8)}px)`,
+      height: `calc(100vh - ${theme.spacing(10)}px)`,
     },
   },
   loading: {
@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   chart: {
-    width: '100%',
-    maxWidth: '500px',
+    width: `calc(100vw - ${theme.spacing(1)}px)`,
+    maxWidth: 500,
   },
   layout: {
     width: '100%',
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: '1fr',
     justifyItems: 'center',
     [theme.breakpoints.up('md')]: {
-      height: `calc(100vh - ${theme.spacing(9)}px)`,
+      height: `calc(100vh - ${theme.spacing(12)}px)`,
       gridAutoRows: 'unset',
       gridTemplateColumns: '1fr 1fr',
       alignItems: 'center',
@@ -136,6 +136,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
                 }}
               />
             </div>
+
             <ChartDatasets datasets={allDatasets} onChange={setAllDatasets} onDelete={chart.refetch} />
           </div>
         </div>
