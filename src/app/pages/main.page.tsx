@@ -34,13 +34,13 @@ const useStyles = makeStyles((theme) => ({
   speedDial: {
     position: 'fixed',
     zIndex: 100,
-    bottom: 30,
-    right: 20,
+    bottom: theme.spacing(4),
+    right: theme.spacing(2.5),
     [theme.breakpoints.up('sm')]: {
-      bottom: 36,
+      bottom: theme.spacing(5),
     },
     [theme.breakpoints.up('md')]: {
-      bottom: 20,
+      bottom: theme.spacing(2.5),
     },
   },
 }));

@@ -109,9 +109,8 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
     <div className={classes.root}>
       {list &&
         list.map((chart) => (
-          <>
+          <div key={chart.id}>
             <Paper
-              key={chart.id}
               className={selected === chart.id ? `${classes.item} ${classes.selected}` : classes.item}
               elevation={selected === chart.id ? 10 : 2}
             >
@@ -135,7 +134,7 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
               open={chart.deleting}
               onClose={() => setDeleting(chart.id, false)}
             />
-          </>
+          </div>
         ))}
     </div>
   );

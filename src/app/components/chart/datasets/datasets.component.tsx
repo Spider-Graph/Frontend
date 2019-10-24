@@ -26,8 +26,9 @@ const useStyles = makeStyles((theme) => ({
     width: '95vw',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    marginBottom: theme.spacing(11),
     [theme.breakpoints.up('md')]: {
+      marginBottom: 0,
       width: '40vw',
     },
   },
@@ -41,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  datasets: {
+    justifySelf: 'center',
   },
   card: {
     display: 'flex',
@@ -110,37 +114,39 @@ const ChartDatasets: React.FunctionComponent<ChartDatasetsProps> = ({ datasets, 
         </Fade>
       </div>
 
-      {datasets.map((dataset, i) => (
-        <div key={dataset.id}>
-          <Grow in={!!dataset.id && !loading}>
-            <Card className={classes.card}>
-              <Checkbox
-                checked={dataset.enabled}
-                onClick={() => toggleEnabled(i)()}
-                style={{ color: dataset.backgroundColor }}
-              />
-              <Typography className={classes.text} variant="subtitle1" display="inline">
-                {dataset.label}
-              </Typography>
-              <IconButton onClick={() => history.push(`/dataset/${dataset.id}`)}>
-                <Icon>edit</Icon>
-              </IconButton>
-              <IconButton onClick={() => setDeleting(dataset.id, true)}>
-                <Icon>delete</Icon>
-              </IconButton>
-            </Card>
-          </Grow>
-          <Confirm
-            action={() => deleteItem(dataset.id)}
-            title={`Delete ${dataset.label}`}
-            text="Are you sure you want to delete this dataset?"
-            confirmText="Delete"
-            cancelText="Cancel"
-            open={dataset.deleting}
-            onClose={() => setDeleting(dataset.id, false)}
-          />
-        </div>
-      ))}
+      <div className={classes.datasets}>
+        {datasets.map((dataset, i) => (
+          <div key={dataset.id}>
+            <Grow in={!!dataset.id && !loading}>
+              <Card className={classes.card}>
+                <Checkbox
+                  checked={dataset.enabled}
+                  onClick={() => toggleEnabled(i)()}
+                  style={{ color: dataset.backgroundColor }}
+                />
+                <Typography className={classes.text} variant="subtitle1" display="inline">
+                  {dataset.label}
+                </Typography>
+                <IconButton onClick={() => history.push(`/dataset/${dataset.id}`)}>
+                  <Icon>edit</Icon>
+                </IconButton>
+                <IconButton onClick={() => setDeleting(dataset.id, true)}>
+                  <Icon>delete</Icon>
+                </IconButton>
+              </Card>
+            </Grow>
+            <Confirm
+              action={() => deleteItem(dataset.id)}
+              title={`Delete ${dataset.label}`}
+              text="Are you sure you want to delete this dataset?"
+              confirmText="Delete"
+              cancelText="Cancel"
+              open={dataset.deleting}
+              onClose={() => setDeleting(dataset.id, false)}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

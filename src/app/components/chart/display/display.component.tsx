@@ -14,7 +14,7 @@ import { ChartDatasets } from '@components/chart/datasets/datasets.component';
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
-    paddingTop: theme.spacing(1),
+    paddingTop: theme.spacing(3),
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     display: 'flex',
@@ -42,25 +42,17 @@ const useStyles = makeStyles((theme) => ({
   chart: {
     width: '100%',
     maxWidth: '500px',
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(5),
-    [theme.breakpoints.up('md')]: {
-      marginTop: 0,
-      marginBottom: 0,
-    },
   },
   layout: {
     width: '100%',
-    marginBottom: theme.spacing(10),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    justifyItems: 'center',
     [theme.breakpoints.up('md')]: {
-      marginBottom: 0,
-      flexDirection: 'row',
+      height: `calc(100vh - ${theme.spacing(9)}px)`,
+      gridAutoRows: 'unset',
+      gridTemplateColumns: '1fr 1fr',
       alignItems: 'center',
-      justifyContent: 'space-around',
-      height: 'calc(100% - 128px)',
     },
   },
 }));
@@ -85,7 +77,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
   React.useEffect(() => {
     if (!chart.data) return;
     setTitle(chart.data.chart.title);
-  }, [chart.data]);
+  }, [chart.data, setTitle]);
 
   React.useEffect(() => {
     if (!chart.data) return;
