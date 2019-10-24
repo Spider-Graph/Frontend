@@ -12,6 +12,9 @@ export interface AddChartVariables {
 export const ADD_CHART = gql`
   mutation AddChart($chart: ChangeChart!) {
     addChart(chart: $chart) {
+      chart {
+        id
+      }
       completed
     }
   }

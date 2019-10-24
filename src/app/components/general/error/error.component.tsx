@@ -1,17 +1,10 @@
 import React from 'react';
 
-import {
-  Snackbar,
-  SnackbarContent,
-  Icon,
-  makeStyles,
-  useTheme,
-  useMediaQuery,
-} from '@material-ui/core';
+import { Snackbar, SnackbarContent, Icon, makeStyles, useTheme, useMediaQuery } from '@material-ui/core';
 
-import { StoreService } from '@services/store.service';
+import { useUndux } from '@hooks/useUndux';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   error: {
     backgroundColor: theme.palette.error.light,
   },
@@ -33,8 +26,7 @@ const Error: React.FunctionComponent = () => {
   const classes = useStyles({});
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.up('md'));
-  const store = StoreService.useStore();
-  const error = store.get('error');
+  const [error, setError] = useUndux('error');
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -43,7 +35,7 @@ const Error: React.FunctionComponent = () => {
 
   const removeError = () => {
     setOpen(false);
-    setTimeout(() => store.set('error')(null), 200);
+    setTimeout(() => setError(null), 200);
   };
 
   return (

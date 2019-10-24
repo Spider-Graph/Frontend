@@ -1,18 +1,17 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useHistory, useParams } from 'react-router-dom';
 
-import { Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
+import { CircularProgress, Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
 
 import { ChangeChartDTO } from '@models/api';
-import { StoreService } from '@services/store.service';
+import { useUndux } from '@hooks/useUndux';
 import { ADD_CHART, AddChart, AddChartVariables } from '@graphql/mutations';
 import { UPDATE_CHART, UpdateChart, UpdateChartVariables } from '@graphql/mutations';
 import { ChartData, ChartDataVariables, CHART_DATA } from '@graphql/queries';
-import { Dataset, DatasetVariables, DATASET } from '@graphql/queries';
 import { Input } from '@components/general/input/input.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     color: theme.palette.secondary.contrastText,
     backgroundColor: theme.palette.secondary.main,
@@ -35,18 +34,13 @@ const ChartPage: React.FunctionComponent = () => {
   const classes = useStyles({});
   const history = useHistory();
   const { id } = useParams();
-
-  // const id = 'ca063dd0-f3ce-11e9-ae6e-171e9b0f4907';
+  const [, setID] = useUndux('chart');
 
   const [chart, setChart] = React.useState<ChangeChartDTO>({ title: '', labels: ['', '', ''] });
 
   const [addChart, addChartResponse] = useMutation<AddChart, AddChartVariables>(ADD_CHART);
-  const [updateChart, updateChartResponse] = useMutation<UpdateChart, UpdateChartVariables>(
-    UPDATE_CHART
-  );
-  const chartDataResponse = useQuery<ChartData, ChartDataVariables>(CHART_DATA, {
-    variables: { id },
-  });
+  const [updateChart, updateChartResponse] = useMutation<UpdateChart, UpdateChartVariables>(UPDATE_CHART);
+  const chartDataResponse = useQuery<ChartData, ChartDataVariables>(CHART_DATA, { variables: { id }, skip: !id });
 
   React.useEffect(() => {
     if (!chartDataResponse.data) return;
@@ -55,10 +49,13 @@ const ChartPage: React.FunctionComponent = () => {
   }, [setChart, chartDataResponse]);
 
   React.useEffect(() => {
-    if (addChartResponse.data && addChartResponse.data.addChart.completed) history.goBack();
-    if (updateChartResponse.data && updateChartResponse.data.updateChart.completed)
-      history.goBack();
-  }, [addChartResponse, updateChartResponse, history]);
+    const addedChart = addChartResponse.data && addChartResponse.data.addChart.completed;
+    const updatedChart = updateChartResponse.data && updateChartResponse.data.updateChart.completed;
+
+    if (addedChart) setID(addChartResponse.data.addChart.chart.id);
+    if (addedChart) history.goBack();
+    if (updatedChart) history.goBack();
+  }, [history, setID, addChartResponse, updateChartResponse]);
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
@@ -73,13 +70,13 @@ const ChartPage: React.FunctionComponent = () => {
     });
   };
 
+  const addLabel = () => handleChange('labels')([...chart.labels, '']);
+
   const setLabel = (index: number) => (label: string) => {
     const newLabels = [...chart.labels];
     newLabels[index] = label;
     handleChange('labels')(newLabels);
   };
-
-  const addLabel = () => handleChange('labels')([...chart.labels, '']);
 
   const removeLabel = (index: number) => {
     const newLabels = [...chart.labels];
@@ -87,7 +84,7 @@ const ChartPage: React.FunctionComponent = () => {
     handleChange('labels')(newLabels);
   };
 
-  if (chartDataResponse.loading) return <> </>;
+  if (chartDataResponse.loading) return <CircularProgress />;
   return (
     <div className={classes.root}>
       <form className={classes.form} onSubmit={handleSubmit}>

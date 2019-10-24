@@ -8,7 +8,7 @@ import { CircularProgress, Icon, IconButton, Typography, makeStyles } from '@mat
 import { Chart, ChartVariables, CHART } from '@graphql/queries';
 import { getRandomColor } from '@utils/randomColorMaker';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: 'calc(100vh - 64px)',
     padding: theme.spacing(3),
@@ -38,21 +38,25 @@ interface ChartDisplayProps {
 
 const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
   const classes = useStyles({});
-
   const history = useHistory();
-  const query = useQuery<Chart, ChartVariables>(CHART, { variables: { id } });
 
-  if (query.loading) return <CircularProgress />;
+  const { data, loading, refetch } = useQuery<Chart, ChartVariables>(CHART, { variables: { id } });
 
-  const allDatasets = query.data.chart.datasets.map(dataset => ({
+  React.useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  if (loading) return <CircularProgress />;
+  if (!data) return <></>;
+
+  const allDatasets = data.chart.datasets.map((dataset) => ({
     ...dataset,
     backgroundColor: getRandomColor(dataset.label),
     enabled: true,
   }));
 
-  const { labels, title } = query.data.chart;
-
-  const datasets = allDatasets.filter(dataset => dataset.enabled);
+  const { labels, title } = data.chart;
+  const datasets = allDatasets.filter((dataset) => dataset.enabled);
   return (
     <div className={classes.root}>
       <Typography variant="h5">{title}</Typography>

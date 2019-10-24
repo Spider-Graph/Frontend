@@ -4,7 +4,7 @@ import { Toolbar, IconButton, AppBar, makeStyles, Icon } from '@material-ui/core
 
 import { circleInsetBar } from '@theme/vars.theme';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   appBar: {
     top: 'auto',
     bottom: 0,

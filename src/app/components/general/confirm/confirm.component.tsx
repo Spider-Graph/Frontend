@@ -11,14 +11,14 @@ import {
 } from '@material-ui/core';
 
 type ConfirmProps = {
-  action: () => void,
-  cancelText: string,
-  confirmText: string,
-  confirmColor: PropTypes.Color,
-  open: boolean,
-  text: string,
-  title: string,
-  onClose: () => void,
+  action: () => void;
+  cancelText: string;
+  confirmText: string;
+  confirmColor: PropTypes.Color;
+  open: boolean;
+  text: string;
+  title: string;
+  onClose: () => void;
 };
 
 const Confirm: React.FunctionComponent<ConfirmProps> = ({
