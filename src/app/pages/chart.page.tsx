@@ -2,7 +2,7 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { CircularProgress, Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
+import { CircularProgress, Fade, Grow, Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
 
 import { ChangeChartDTO } from '@models/api';
 import { useUndux } from '@hooks/useUndux';
@@ -18,6 +18,14 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     minHeight: '100vh',
     width: '100vw',
+  },
+  loading: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   form: {
     padding: theme.spacing(1),
@@ -58,9 +66,11 @@ const ChartPage: React.FunctionComponent = () => {
   const history = useHistory();
   const { id } = useParams();
 
-  const [chart, setChart] = React.useState<ChangeChartDTO>({ title: '', labels: ['', '', ''] });
   const [, setID] = useUndux('chart');
   const [, setError] = useUndux('error');
+
+  const [chart, setChart] = React.useState<ChangeChartDTO>({ title: '', labels: ['', '', ''] });
+  const [exit, setExit] = React.useState(false);
 
   const [addChart, addChartResponse] = useMutation<AddChart, AddChartVariables>(ADD_CHART);
   const [updateChart, updateChartResponse] = useMutation<UpdateChart, UpdateChartVariables>(UPDATE_CHART);
@@ -125,42 +135,60 @@ const ChartPage: React.FunctionComponent = () => {
     handleChange('labels')(newLabels);
   };
 
-  if (chartDataResponse.loading) return <CircularProgress />;
+  const goBack = () => {
+    setExit(true);
+    setTimeout(() => history.push('/'), 300);
+  };
+
+  const { loading } = chartDataResponse;
   return (
-    <div className={classes.root}>
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <Typography variant="overline">Chart</Typography>
-        <Input label="Title" value={chart.title} onChange={handleChange('title')} />
-        <div className={classes.labelsOverline}>
-          <Typography variant="overline">Labels</Typography>
-          <IconButton className={classes.addIcon} color="inherit" onClick={() => addLabel()}>
-            <Icon>add_circle_outline</Icon>
-          </IconButton>
-        </div>
-        {chart.labels.map((item, i) => (
-          <Input
-            key={i}
-            label={`Label ${i + 1}`}
-            trailingIcon="remove"
-            value={item}
-            onChange={setLabel(i)}
-            onClick={() => removeLabel(i)}
-          />
-        ))}
-      </form>
-      <div className={classes.bottomRow}>
-        <div className={classes.icon}>
-          <IconButton color="inherit" onClick={() => history.goBack()}>
-            <Icon>arrow_back</Icon>
-          </IconButton>
-        </div>
-        <div className={classes.icon}>
-          <IconButton color="inherit" onClick={() => handleSubmit()}>
-            <Icon>library_add</Icon>
-          </IconButton>
+    <Fade in={!exit}>
+      <div className={classes.root}>
+        <Fade in={loading}>
+          <div className={classes.loading}>
+            <CircularProgress />
+          </div>
+        </Fade>
+        <Fade in={!loading}>
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <Typography variant="overline">Chart</Typography>
+            <Grow in={true}>
+              <Input label="Title" ariaLabel={`Title`} value={chart.title} onChange={handleChange('title')} />
+            </Grow>
+            <div className={classes.labelsOverline}>
+              <Typography variant="overline">Labels</Typography>
+              <IconButton className={classes.addIcon} color="inherit" onClick={() => addLabel()}>
+                <Icon>add_circle_outline</Icon>
+              </IconButton>
+            </div>
+            {chart.labels.map((item, i) => (
+              <Grow key={i} in={true}>
+                <Input
+                  label={`Label ${i + 1}`}
+                  ariaLabel={`Label ${i + 1}`}
+                  trailingIcon="remove"
+                  value={item}
+                  onChange={setLabel(i)}
+                  onClick={() => removeLabel(i)}
+                />
+              </Grow>
+            ))}
+          </form>
+        </Fade>
+        <div className={classes.bottomRow}>
+          <div className={classes.icon}>
+            <IconButton color="inherit" onClick={() => goBack()}>
+              <Icon>arrow_back</Icon>
+            </IconButton>
+          </div>
+          <div className={classes.icon}>
+            <IconButton color="inherit" onClick={() => handleSubmit()}>
+              <Icon>library_add</Icon>
+            </IconButton>
+          </div>
         </div>
       </div>
-    </div>
+    </Fade>
   );
 };
 

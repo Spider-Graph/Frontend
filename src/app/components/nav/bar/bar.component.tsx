@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     clipPath: circleInsetBar,
     [theme.breakpoints.up('md')]: {
+      position: 'relative',
       bottom: 'unset',
       clipPath: 'unset',
     },

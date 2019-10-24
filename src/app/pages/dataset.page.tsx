@@ -2,7 +2,7 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 
-import { CircularProgress, Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
+import { CircularProgress, Fade, Grow, Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
 
 import { ChangeDatasetDTO } from '@models/api';
 import { useUndux } from '@hooks/useUndux';
@@ -19,6 +19,14 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     minHeight: '100vh',
     width: '100vw',
+  },
+  loading: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   form: {
     padding: theme.spacing(1),
@@ -56,6 +64,7 @@ const DatasetPage: React.FunctionComponent = () => {
   const [, setError] = useUndux('error');
 
   const [dataset, setDataset] = React.useState<ChangeDatasetDTO>({ label: '', data: [] });
+  const [exit, setExit] = React.useState(false);
 
   const [addDataset, addDatasetResponse] = useMutation<AddDataset, AddDatasetVariables>(ADD_DATASET);
   const [updateDataset, updateDatasetResponse] = useMutation<UpdateDataset, UpdateDatasetVariables>(UPDATE_DATASET);
@@ -125,31 +134,53 @@ const DatasetPage: React.FunctionComponent = () => {
     handleChange('data')(newData);
   };
 
-  if (chartDataResponse.loading || datasetResponse.loading) return <CircularProgress />;
-  if (!chartDataResponse.data) return <Redirect to="/" />;
-  const { labels } = chartDataResponse.data.chart;
+  const goBack = () => {
+    setExit(true);
+    setTimeout(() => history.push('/'), 300);
+  };
+
+  if (!chartDataResponse.data && !chartDataResponse.loading) return <Redirect to="/" />;
+  const loading = chartDataResponse.loading || datasetResponse.loading;
+  const { labels } = chartDataResponse.data ? chartDataResponse.data.chart : { labels: [''] };
   return (
-    <div className={classes.root}>
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <Typography variant="overline">Dataset</Typography>
-        <Input label="Label" value={dataset.label} onChange={handleChange('label')} />
-        <Typography variant="overline">Values</Typography>
-        <div className={classes.grid}>
-          {dataset.data.length !== 0 &&
-            labels.map((item, i) => (
-              <Input key={i} label={item} type="number" value={dataset.data[i]} onChange={setData(i)} />
-            ))}
+    <Fade in={!exit}>
+      <div className={classes.root}>
+        <Fade in={loading}>
+          <div className={classes.loading}>
+            <CircularProgress />
+          </div>
+        </Fade>
+        <Fade in={!loading}>
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <Typography variant="overline">Dataset</Typography>
+            <Grow in={true}>
+              <Input label="Label" ariaLabel="Label" value={dataset.label} onChange={handleChange('label')} />
+            </Grow>
+            <Typography variant="overline">Values</Typography>
+            <div className={classes.grid}>
+              {dataset.data.length !== 0 &&
+                labels.map((item, i) => (
+                  <Grow key={i} in={true}>
+                    <Input label={item} ariaLabel={item} type="number" value={dataset.data[i]} onChange={setData(i)} />
+                  </Grow>
+                ))}
+            </div>
+          </form>
+        </Fade>
+        <div className={classes.bottomRow}>
+          <div className={classes.icon}>
+            <IconButton color="inherit" onClick={() => goBack()}>
+              <Icon>arrow_back</Icon>
+            </IconButton>
+          </div>
+          <div className={classes.icon}>
+            <IconButton color="inherit" onClick={() => handleSubmit()}>
+              <Icon>library_add</Icon>
+            </IconButton>
+          </div>
         </div>
-      </form>
-      <div className={classes.bottomRow}>
-        <IconButton color="inherit" onClick={() => history.goBack()}>
-          <Icon>arrow_back</Icon>
-        </IconButton>
-        <IconButton color="inherit" onClick={() => handleSubmit()}>
-          <Icon>library_add</Icon>
-        </IconButton>
       </div>
-    </div>
+    </Fade>
   );
 };
 
