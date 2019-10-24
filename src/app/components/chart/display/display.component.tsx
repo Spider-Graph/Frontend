@@ -96,7 +96,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
             }}
           />
         </div>
-        <ChartDatasets datasets={allDatasets} onChange={setAllDatasets} />
+        <ChartDatasets datasets={allDatasets} onChange={setAllDatasets} onDelete={refetch} />
       </div>
     </div>
   );
