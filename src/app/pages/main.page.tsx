@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 
 import { Fade, Icon, Typography, makeStyles } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
@@ -64,9 +65,20 @@ const MainPage: React.FunctionComponent = () => {
     setNav(false);
   }, [availableActions, setActions, id]);
 
+  const saveChart = () => {
+    html2canvas(document.querySelector('#chartjs')).then((canvas) => {
+      const imgURL = canvas.toDataURL('image/png');
+      const dlLink = document.createElement('a');
+      dlLink.download = 'chart.png';
+      dlLink.href = imgURL;
+      dlLink.dataset.downloadurl = ['image/png', dlLink.download, dlLink.href].join(':');
+      dlLink.click();
+    });
+  };
+
   return (
     <>
-      <NavBar showShare={!!id} onMenu={() => setNav(true)} onShare={() => {}} />
+      <NavBar showShare={!!id} onMenu={() => setNav(true)} onShare={() => saveChart()} />
       <Fade in={!id}>
         <div className={classes.empty}>
           <Icon className={classes.emptyIcon}>insert_chart_outlined</Icon>
