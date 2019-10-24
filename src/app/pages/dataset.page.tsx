@@ -4,12 +4,13 @@ import { Redirect, useHistory, useParams } from 'react-router-dom';
 
 import { CircularProgress, Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
 
+import { ChangeDatasetDTO } from '@models/api';
 import { useUndux } from '@hooks/useUndux';
+import { ADD_DATASET, AddDataset, AddDatasetVariables } from '@graphql/mutations';
+import { UPDATE_DATASET, UpdateDataset, UpdateDatasetVariables } from '@graphql/mutations';
 import { ChartData, ChartDataVariables, CHART_DATA } from '@graphql/queries';
 import { Dataset, DatasetVariables, DATASET } from '@graphql/queries';
 import { Input } from '@components/general/input/input.component';
-import { ADD_DATASET, AddDataset, AddDatasetVariables } from '@graphql/mutations';
-import { ChangeDatasetDTO } from '@models/api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,16 +36,18 @@ const DatasetPage: React.FunctionComponent = () => {
   const history = useHistory();
   const { id } = useParams();
   const [chart] = useUndux('chart');
-  // const chart = 'ca063dd0-f3ce-11e9-ae6e-171e9b0f4907';
 
   const [dataset, setDataset] = React.useState<ChangeDatasetDTO>({ label: '', data: [] });
 
   const [addDataset, addDatasetResponse] = useMutation<AddDataset, AddDatasetVariables>(ADD_DATASET);
+  const [updateDataset, updateDatasetResponse] = useMutation<UpdateDataset, UpdateDatasetVariables>(UPDATE_DATASET);
   const chartDataResponse = useQuery<ChartData, ChartDataVariables>(CHART_DATA, {
     variables: { id: chart },
+    skip: !chart,
   });
   const datasetResponse = useQuery<Dataset, DatasetVariables>(DATASET, {
-    variables: { id: id || '', chart },
+    variables: { id: id, chart },
+    skip: !id || !chart,
   });
 
   React.useEffect(() => {
@@ -54,20 +57,22 @@ const DatasetPage: React.FunctionComponent = () => {
     } else if (chartDataResponse.data) {
       const data = new Array<number>(chartDataResponse.data.chart.labels.length);
       data.fill(0);
-      setDataset({ ...dataset, data });
+      setDataset({ data, label: '' });
     }
-  }, [chartDataResponse, dataset, datasetResponse, setDataset]);
+  }, [chartDataResponse, datasetResponse, setDataset]);
 
   React.useEffect(() => {
-    if (!addDatasetResponse.data) return;
-    if (addDatasetResponse.data.addDataset.completed) history.goBack();
-  }, [addDatasetResponse, history]);
+    const addedDataset = addDatasetResponse.data && addDatasetResponse.data.addDataset.completed;
+    const updatedDataset = updateDatasetResponse.data && updateDatasetResponse.data.updateDataset.completed;
+
+    if (addedDataset) history.goBack();
+    if (updatedDataset) history.goBack();
+  }, [history, addDatasetResponse, updateDatasetResponse]);
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
-    addDataset({
-      variables: { chart, dataset },
-    });
+    if (id) updateDataset({ variables: { chart, id, dataset } });
+    else addDataset({ variables: { chart, dataset } });
   };
 
   const handleChange = (key: string) => (value: string | number | number[]) => {

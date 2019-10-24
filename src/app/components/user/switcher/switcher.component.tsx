@@ -1,10 +1,10 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { QueryResult } from '@apollo/react-common';
 
-import { Me, ME } from '@graphql/queries';
 import { Button, CircularProgress, Typography, makeStyles } from '@material-ui/core';
 
 import { useUndux } from '@hooks/useUndux';
+import { Me } from '@graphql/queries';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,10 +31,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserSwitcher: React.FunctionComponent = () => {
+interface UserSwitcherProps {
+  me: QueryResult<Me, null>;
+}
+
+const UserSwitcher: React.FunctionComponent<UserSwitcherProps> = ({ me }) => {
   const classes = useStyles({});
+  const { loading, data } = me;
   const [, setToken] = useUndux('token');
-  const { loading, data } = useQuery<Me, null>(ME);
 
   const handleSignOut = () => {
     setToken(null);
