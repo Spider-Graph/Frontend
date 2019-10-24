@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { DatasetChangeResponseDTO } from '@models/api';
 
 export interface DeleteDataset {
-  addDataset: DatasetChangeResponseDTO;
+  deleteDataset: DatasetChangeResponseDTO;
 }
 
 export interface DeleteDatasetVariables {
@@ -13,6 +13,9 @@ export interface DeleteDatasetVariables {
 export const DELETE_DATASET = gql`
   mutation AddDataset($chart: String!, $id: String!) {
     deleteDataset(chart: $chart, id: $id) {
+      dataset {
+        id
+      }
       completed
     }
   }
