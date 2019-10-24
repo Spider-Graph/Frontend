@@ -19,6 +19,8 @@ import { DatasetUI } from '@models/DatasetUI';
 import { useUndux } from '@hooks/useUndux';
 import { DeleteDataset, DeleteDatasetVariables, DELETE_DATASET } from '@graphql/mutations';
 
+import { Confirm } from '@components/general/confirm/confirm.component';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '85vw',
@@ -29,7 +31,10 @@ const useStyles = makeStyles((theme) => ({
       width: '40vw',
     },
   },
-  add: {
+  loading: {
+    position: 'absolute',
+  },
+  none: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -80,46 +85,59 @@ const ChartDatasets: React.FunctionComponent<ChartDatasetsProps> = ({ datasets, 
     onChange(newDatasets);
   };
 
+  const setDeleting = (id: string, deleting: boolean) => {
+    onChange(datasets.map((dataset) => (dataset.id === id ? { ...dataset, deleting } : dataset)));
+  };
+
   const deleteItem = (id: string) => {
     deleteDataset({ variables: { id, chart } });
   };
 
-  if (deleteDatasetResponse.loading)
-    return (
-      <div className={classes.root}>
-        <Fade in={deleteDatasetResponse.loading}>
-          <CircularProgress />
-        </Fade>
-      </div>
-    );
+  const loading = deleteDatasetResponse.loading;
 
   return (
     <div className={classes.root}>
-      <Fade in={datasets.length === 0}>
-        <div className={classes.add}>
+      <div className={classes.none}>
+        <Fade in={loading}>
+          <CircularProgress className={classes.loading} />
+        </Fade>
+
+        <Fade in={datasets.length === 0}>
           <Button onClick={() => history.push('/dataset')}>ADD A DATASET</Button>
-        </div>
-      </Fade>
+        </Fade>
+      </div>
 
       {datasets.map((dataset, i) => (
-        <Grow key={dataset.id} in={!!dataset.id}>
-          <Card className={classes.card}>
-            <Checkbox
-              checked={dataset.enabled}
-              onClick={() => toggleEnabled(i)()}
-              style={{ color: dataset.backgroundColor }}
-            />
-            <Typography className={classes.text} variant="subtitle1" display="inline">
-              {dataset.label}
-            </Typography>
-            <IconButton onClick={() => history.push(`/dataset/${dataset.id}`)}>
-              <Icon>edit</Icon>
-            </IconButton>
-            <IconButton onClick={() => deleteItem(dataset.id)}>
-              <Icon>delete</Icon>
-            </IconButton>
-          </Card>
-        </Grow>
+        <div key={dataset.id}>
+          <Grow in={!!dataset.id && !loading}>
+            <Card className={classes.card}>
+              <Checkbox
+                checked={dataset.enabled}
+                onClick={() => toggleEnabled(i)()}
+                style={{ color: dataset.backgroundColor }}
+              />
+              <Typography className={classes.text} variant="subtitle1" display="inline">
+                {dataset.label}
+              </Typography>
+              <IconButton onClick={() => history.push(`/dataset/${dataset.id}`)}>
+                <Icon>edit</Icon>
+              </IconButton>
+              <IconButton onClick={() => setDeleting(dataset.id, true)}>
+                <Icon>delete</Icon>
+              </IconButton>
+            </Card>
+          </Grow>
+          <Confirm
+            action={() => deleteItem(dataset.id)}
+            title="Delete Dataset"
+            text="Are you sure you want to delete this dataset?"
+            confirmText="Delete"
+            cancelText="Cancel"
+            confirmColor="inherit"
+            open={dataset.deleting}
+            onClose={() => setDeleting(dataset.id, false)}
+          />
+        </div>
       ))}
     </div>
   );

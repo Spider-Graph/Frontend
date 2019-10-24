@@ -4,9 +4,12 @@ import { useMutation } from '@apollo/react-hooks';
 
 import { CircularProgress, Icon, Paper, Typography, makeStyles } from '@material-ui/core';
 
+import { ChartUI } from '@models/ChartUI';
 import { useUndux } from '@hooks/useUndux';
 import { DeleteChart, DeleteChartVariables, DELETE_CHART } from '@graphql/mutations';
 import { Charts } from '@graphql/queries';
+
+import { Confirm } from '@components/general/confirm/confirm.component';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    margin: theme.spacing(2),
   },
   item: {
     color: theme.palette.text.secondary,
@@ -51,16 +55,27 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
   const classes = useStyles({});
 
   const [selected, setSelected] = useUndux('chart');
+  const [, setTitle] = useUndux('title');
   const [, setError] = useUndux('error');
+
+  const [list, setList] = React.useState<ChartUI[]>([]);
 
   const [deleteChart, deleteChartResponse] = useMutation<DeleteChart, DeleteChartVariables>(DELETE_CHART);
 
   React.useEffect(() => {
     if (deleteChartResponse.data) {
-      if (deleteChartResponse.data.deleteChart.chart.id === selected) setSelected(null);
+      const deletedSelected = deleteChartResponse.data.deleteChart.chart.id === selected;
+      if (deletedSelected) setSelected(null);
+      if (deletedSelected) setTitle('');
       charts.refetch();
     }
-  }, [charts, selected, setSelected, deleteChartResponse]);
+  }, [charts, selected, setSelected, setTitle, deleteChartResponse]);
+
+  React.useEffect(() => {
+    if (charts.data) {
+      setList(charts.data.charts.map((chart) => ({ ...chart, deleting: false })));
+    }
+  }, [charts]);
 
   React.useEffect(() => {
     if (deleteChartResponse.error) {
@@ -74,6 +89,15 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
     }
   }, [deleteChartResponse, charts, setError]);
 
+  const select = (id: string, title: string) => {
+    setSelected(id);
+    setTitle(title);
+  };
+
+  const setDeleting = (id: string, deleting: boolean) => {
+    setList(list.map((chart) => (chart.id === id ? { ...chart, deleting } : chart)));
+  };
+
   if (charts.loading)
     return (
       <div className={classes.loading}>
@@ -81,28 +105,39 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
       </div>
     );
 
-  if (!charts.data) return <div />;
-
   return (
     <div className={classes.root}>
-      {charts.data.charts.map((chart) => (
-        <Paper
-          key={chart.id}
-          className={selected === chart.id ? `${classes.item} ${classes.selected}` : classes.item}
-          elevation={selected === chart.id ? 10 : 2}
-        >
-          <Typography
-            className={selected === chart.id ? `${classes.text} ${classes.selectedText}` : classes.text}
-            variant="button"
-            onClick={() => setSelected(chart.id)}
-          >
-            {chart.title}
-          </Typography>
-          <Icon color="inherit" onClick={() => deleteChart({ variables: { id: chart.id } })}>
-            delete
-          </Icon>
-        </Paper>
-      ))}
+      {list &&
+        list.map((chart) => (
+          <>
+            <Paper
+              key={chart.id}
+              className={selected === chart.id ? `${classes.item} ${classes.selected}` : classes.item}
+              elevation={selected === chart.id ? 10 : 2}
+            >
+              <Typography
+                className={selected === chart.id ? `${classes.text} ${classes.selectedText}` : classes.text}
+                variant="button"
+                onClick={() => select(chart.id, chart.title)}
+              >
+                {chart.title}
+              </Typography>
+              <Icon color="inherit" onClick={() => setDeleting(chart.id, true)}>
+                delete
+              </Icon>
+            </Paper>
+            <Confirm
+              action={() => deleteChart({ variables: { id: chart.id } })}
+              title="Delete Dataset"
+              text="Are you sure you want to delete this dataset?"
+              confirmText="Delete"
+              cancelText="Cancel"
+              confirmColor="inherit"
+              open={chart.deleting}
+              onClose={() => setDeleting(chart.id, false)}
+            />
+          </>
+        ))}
     </div>
   );
 };

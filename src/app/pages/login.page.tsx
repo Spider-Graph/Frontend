@@ -7,6 +7,7 @@ import { CircularProgress, Fade, makeStyles } from '@material-ui/core';
 import { CredentialsDTO, UserDetailsDTO } from '@models/api';
 import { useUndux } from '@hooks/useUndux';
 import { Login, LOGIN, Register, REGISTER } from '@graphql/mutations';
+
 import { UserForm } from '@components/user/form/form.component';
 
 const useStyles = makeStyles((theme) => ({

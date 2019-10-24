@@ -8,8 +8,6 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
-    "noImplicitAny": false,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
@@ -22,7 +20,8 @@
     "experimentalDecorators": true,
     "jsx": "preserve",
     "baseUrl": "./src",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true
   },
   "exclude": [
     "node_modules"

@@ -1,6 +1,6 @@
 import { Store } from 'undux';
 
-export type ChartState = { chart?: string };
+export type ChartState = { chart?: string; title?: string };
 
 export class ChartService {
   private static store: Store<ChartState>;

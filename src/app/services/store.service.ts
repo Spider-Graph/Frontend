@@ -21,7 +21,7 @@ export class StoreService {
   };
 
   private static readonly store = createConnectedStore<StoreState>(
-    { token: localStorage.getItem('token'), chart: null, error: '' },
+    { token: localStorage.getItem('token'), chart: null, error: '', title: '' },
     StoreService.effects
   );
 

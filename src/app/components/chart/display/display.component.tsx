@@ -1,14 +1,14 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { Radar } from 'react-chartjs-2';
 
-import { CircularProgress, Fade, Icon, IconButton, Typography, makeStyles } from '@material-ui/core';
+import { CircularProgress, Fade, makeStyles } from '@material-ui/core';
 
 import { DatasetUI } from '@models/DatasetUI';
 import { useUndux } from '@hooks/useUndux';
 import { getRandomColor } from '@utils/randomColorMaker';
 import { Chart, ChartVariables, CHART } from '@graphql/queries';
+
 import { ChartDatasets } from '@components/chart/datasets/datasets.component';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,8 +43,10 @@ const useStyles = makeStyles((theme) => ({
   chart: {
     width: '100%',
     maxWidth: '500px',
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(5),
     [theme.breakpoints.up('md')]: {
+      marginTop: 0,
       marginBottom: 0,
     },
   },
@@ -70,7 +72,6 @@ interface ChartDisplayProps {
 
 const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
   const classes = useStyles({});
-  const history = useHistory();
 
   const chart = useQuery<Chart, ChartVariables>(CHART, {
     variables: { id },
@@ -88,6 +89,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
         ...dataset,
         backgroundColor: getRandomColor(dataset.label),
         enabled: true,
+        deleting: false,
       }))
     );
   }, [chart.data, setAllDatasets]);
@@ -99,7 +101,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
     }
   }, [chart, setError]);
 
-  const { labels, title } = chart.data ? chart.data.chart : { title: '', labels: [] };
+  const { labels } = chart.data ? chart.data.chart : { labels: [] };
   const datasets = allDatasets.filter((dataset) => dataset.enabled);
 
   return (
@@ -112,14 +114,6 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
 
       <Fade in={!!chart.data}>
         <div className={classes.content}>
-          <header className={classes.header}>
-            <Typography className={classes.title} variant="h5">
-              {title}
-            </Typography>
-            <IconButton onClick={() => history.push(`/chart/${id}`)}>
-              <Icon>edit</Icon>
-            </IconButton>
-          </header>
           <div className={classes.layout}>
             <div id="chartjs" className={classes.chart}>
               <Radar

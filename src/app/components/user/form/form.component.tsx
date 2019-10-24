@@ -3,6 +3,7 @@ import React from 'react';
 import { FormGroup, Button, PropTypes, makeStyles } from '@material-ui/core';
 
 import { UserDetailsDTO } from '@models/api/user.dto';
+
 import { Input } from '@components/general/input/input.component';
 
 const useStyles = makeStyles((theme) => ({

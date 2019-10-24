@@ -6,6 +6,7 @@ import { Fade, Icon, Typography, makeStyles } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 
 import { useUndux } from '@hooks/useUndux';
+
 import { ChartDisplay } from '@components/chart/display/display.component';
 import { NavBar } from '@components/nav/bar/bar.component';
 import { NavDrawer } from '@components/nav/drawer/drawer.component';
@@ -30,8 +31,11 @@ const useStyles = makeStyles((theme) => ({
   speedDial: {
     position: 'fixed',
     zIndex: 100,
-    bottom: 36,
+    bottom: 30,
     right: 20,
+    [theme.breakpoints.up('sm')]: {
+      bottom: 36,
+    },
     [theme.breakpoints.up('md')]: {
       bottom: 20,
     },
@@ -78,7 +82,7 @@ const MainPage: React.FunctionComponent = () => {
 
   return (
     <>
-      <NavBar showShare={!!id} onMenu={() => setNav(true)} onShare={() => saveChart()} />
+      <NavBar onEdit={() => history.push(`/chart/${id}`)} onMenu={() => setNav(true)} onShare={() => saveChart()} />
       <Fade in={!id}>
         <div className={classes.empty}>
           <Icon className={classes.emptyIcon}>insert_chart_outlined</Icon>
