@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 350,
     color: theme.palette.grey[400],
   },
+  hide: {
+    display: 'none',
+  },
   speedDial: {
     position: 'fixed',
     zIndex: 100,
@@ -84,7 +87,7 @@ const MainPage: React.FunctionComponent = () => {
     <>
       <NavBar onEdit={() => history.push(`/chart/${id}`)} onMenu={() => setNav(true)} onShare={() => saveChart()} />
       <Fade in={!id}>
-        <div className={classes.empty}>
+        <div className={!id ? classes.empty : classes.hide}>
           <Icon className={classes.emptyIcon}>insert_chart_outlined</Icon>
           <Typography variant="h6">SELECT OR ADD A CHART</Typography>
         </div>

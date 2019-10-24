@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    overflowY: 'scroll',
     [theme.breakpoints.up('md')]: {
       height: `calc(100vh - ${theme.spacing(8)}px)`,
     },

@@ -23,13 +23,16 @@ import { Confirm } from '@components/general/confirm/confirm.component';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '85vw',
+    width: '95vw',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     [theme.breakpoints.up('md')]: {
       width: '40vw',
     },
+  },
+  hide: {
+    display: 'none',
   },
   loading: {
     position: 'absolute',
@@ -97,7 +100,7 @@ const ChartDatasets: React.FunctionComponent<ChartDatasetsProps> = ({ datasets, 
 
   return (
     <div className={classes.root}>
-      <div className={classes.none}>
+      <div className={loading || datasets.length === 0 ? classes.none : classes.hide}>
         <Fade in={loading}>
           <CircularProgress className={classes.loading} />
         </Fade>
