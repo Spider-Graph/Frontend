@@ -15,6 +15,7 @@ export const ADD_CHART = gql`
       chart {
         id
       }
+      completed
     }
   }
 `;

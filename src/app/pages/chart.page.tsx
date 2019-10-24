@@ -49,7 +49,7 @@ const ChartPage: React.FunctionComponent = () => {
   }, [setChart, chartDataResponse]);
 
   React.useEffect(() => {
-    const addedChart = addChartResponse.data && addChartResponse.data.addChart.chart.id;
+    const addedChart = addChartResponse.data && addChartResponse.data.addChart.completed;
     const updatedChart = updateChartResponse.data && updateChartResponse.data.updateChart.completed;
 
     if (addedChart) setID(addChartResponse.data.addChart.chart.id);

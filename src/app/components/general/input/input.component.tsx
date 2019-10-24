@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '2px 4px',
     display: 'flex',
     margin: 16,
-    height: 56,
+    height: 64,
   },
   padding: {
     display: 'flex',
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   input: ({ label, leadingIcon }: StyleProps) => ({
-    marginTop: label ? -11 : 0,
+    marginTop: label ? -13 : 0,
     marginLeft: !leadingIcon ? 10 : 0,
     flex: 1,
   }),
