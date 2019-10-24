@@ -7,14 +7,19 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  PropTypes,
+  makeStyles,
 } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  confirm: {
+    color: theme.palette.error.main,
+  },
+}));
 
 type ConfirmProps = {
   action: () => void;
   cancelText: string;
   confirmText: string;
-  confirmColor: PropTypes.Color;
   open: boolean;
   text: string;
   title: string;
@@ -25,12 +30,13 @@ const Confirm: React.FunctionComponent<ConfirmProps> = ({
   action,
   cancelText,
   confirmText,
-  confirmColor,
   open,
   text,
   title,
   onClose,
 }) => {
+  const classes = useStyles({});
+
   const handleAction = () => {
     action();
     onClose();
@@ -43,10 +49,8 @@ const Confirm: React.FunctionComponent<ConfirmProps> = ({
         <DialogContentText>{text}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
-          {cancelText}
-        </Button>
-        <Button onClick={handleAction} color={confirmColor} autoFocus>
+        <Button onClick={onClose}>{cancelText}</Button>
+        <Button className={classes.confirm} onClick={handleAction} autoFocus>
           {confirmText}
         </Button>
       </DialogActions>

@@ -129,11 +129,10 @@ const ChartDatasets: React.FunctionComponent<ChartDatasetsProps> = ({ datasets, 
           </Grow>
           <Confirm
             action={() => deleteItem(dataset.id)}
-            title="Delete Dataset"
+            title={`Delete ${dataset.label}`}
             text="Are you sure you want to delete this dataset?"
             confirmText="Delete"
             cancelText="Cancel"
-            confirmColor="inherit"
             open={dataset.deleting}
             onClose={() => setDeleting(dataset.id, false)}
           />
