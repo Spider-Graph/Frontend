@@ -10,6 +10,7 @@ import { ADD_DATASET, AddDataset, AddDatasetVariables } from '@graphql/mutations
 import { UPDATE_DATASET, UpdateDataset, UpdateDatasetVariables } from '@graphql/mutations';
 import { ChartData, ChartDataVariables, CHART_DATA } from '@graphql/queries';
 import { Dataset, DatasetVariables, DATASET } from '@graphql/queries';
+
 import { Input } from '@components/general/input/input.component';
 
 const useStyles = makeStyles((theme) => ({
@@ -140,8 +141,9 @@ const DatasetPage: React.FunctionComponent = () => {
   };
 
   if (!chartDataResponse.data && !chartDataResponse.loading) return <Redirect to="/" />;
-  const loading = chartDataResponse.loading || datasetResponse.loading;
-  const { labels } = chartDataResponse.data ? chartDataResponse.data.chart : { labels: [''] };
+  const loading =
+    chartDataResponse.loading || datasetResponse.loading || addDatasetResponse.loading || updateDatasetResponse.loading;
+  const labels = chartDataResponse.data ? chartDataResponse.data.chart.labels : null;
   return (
     <Fade in={!exit}>
       <div className={classes.root}>
@@ -159,6 +161,7 @@ const DatasetPage: React.FunctionComponent = () => {
             <Typography variant="overline">Values</Typography>
             <div className={classes.grid}>
               {dataset.data.length !== 0 &&
+                labels &&
                 labels.map((item, i) => (
                   <Grow key={i} in={true}>
                     <Input label={item} ariaLabel={item} type="number" value={dataset.data[i]} onChange={setData(i)} />

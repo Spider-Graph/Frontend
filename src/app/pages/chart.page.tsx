@@ -9,6 +9,7 @@ import { useUndux } from '@hooks/useUndux';
 import { ADD_CHART, AddChart, AddChartVariables } from '@graphql/mutations';
 import { UPDATE_CHART, UpdateChart, UpdateChartVariables } from '@graphql/mutations';
 import { ChartData, ChartDataVariables, CHART_DATA } from '@graphql/queries';
+
 import { Input } from '@components/general/input/input.component';
 
 const useStyles = makeStyles((theme) => ({
@@ -140,7 +141,7 @@ const ChartPage: React.FunctionComponent = () => {
     setTimeout(() => history.push('/'), 300);
   };
 
-  const { loading } = chartDataResponse;
+  const loading = chartDataResponse.loading || addChartResponse.loading || updateChartResponse.loading;
   return (
     <Fade in={!exit}>
       <div className={classes.root}>

@@ -1,13 +1,23 @@
 import React from 'react';
 
-import { AppBar, Fade, Icon, IconButton, Toolbar, makeStyles } from '@material-ui/core';
+import {
+  AppBar,
+  Fade,
+  Icon,
+  IconButton,
+  Toolbar,
+  Typography,
+  makeStyles,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
 
 import { circleInsetBar } from '@theme/vars.theme';
+import { useUndux } from '@hooks/useUndux';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: 10,
-    height: theme.spacing(8),
     top: 'auto',
     bottom: 0,
     clipPath: circleInsetBar,
@@ -22,16 +32,33 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
   },
+  title: {
+    order: 2,
+    [theme.breakpoints.up('md')]: {
+      order: 0,
+    },
+  },
+  edit: {
+    order: 1,
+    [theme.breakpoints.up('md')]: {
+      order: 0,
+    },
+  },
+  share: {},
 }));
 
 interface NavBarProps {
-  showShare: boolean;
+  onEdit: () => void;
   onMenu: () => void;
   onShare: () => void;
 }
 
-const NavBar: React.FunctionComponent<NavBarProps> = ({ showShare, onMenu, onShare }) => {
+const NavBar: React.FunctionComponent<NavBarProps> = ({ onEdit, onMenu, onShare }) => {
   const classes = useStyles({});
+  const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.up('md'));
+  const [chart] = useUndux('chart');
+  const [title] = useUndux('title');
 
   return (
     <Fade in={true}>
@@ -41,11 +68,31 @@ const NavBar: React.FunctionComponent<NavBarProps> = ({ showShare, onMenu, onSha
             <IconButton color="inherit" onClick={onMenu} aria-label="menu">
               <Icon>menu</Icon>
             </IconButton>
-            <div className={classes.grow} />
-            {showShare && (
-              <IconButton edge="end" color="inherit" onClick={onShare} aria-label="search">
-                <Icon>share</Icon>
-              </IconButton>
+            {chart && (
+              <>
+                <Typography className={classes.title} variant="h5" component="h1">
+                  {title}
+                </Typography>
+                <div className={classes.grow} />
+                <IconButton
+                  className={classes.edit}
+                  edge={md ? 'end' : 'start'}
+                  color="inherit"
+                  onClick={onEdit}
+                  aria-label="search"
+                >
+                  <Icon>edit</Icon>
+                </IconButton>
+                <IconButton
+                  className={classes.share}
+                  edge={md ? 'end' : 'start'}
+                  color="inherit"
+                  onClick={onShare}
+                  aria-label="search"
+                >
+                  <Icon>share</Icon>
+                </IconButton>
+              </>
             )}
           </Toolbar>
         </AppBar>
