@@ -78,8 +78,14 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
     fetchPolicy: 'network-only',
   });
 
+  const [, setTitle] = useUndux('title');
   const [, setError] = useUndux('error');
   const [allDatasets, setAllDatasets] = React.useState<DatasetUI[]>([]);
+
+  React.useEffect(() => {
+    if (!chart.data) return;
+    setTitle(chart.data.chart.title);
+  }, [chart.data]);
 
   React.useEffect(() => {
     if (!chart.data) return;
