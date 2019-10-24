@@ -1,5 +1,7 @@
 # Front-end
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/4c19816c-b3c6-45d4-83ec-a36748c966c6/deploy-status)](https://app.netlify.com/sites/gratracks/deploys)
+
 ## Proposal
 
 ### What problem does your app solve
