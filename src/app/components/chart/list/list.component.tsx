@@ -128,11 +128,10 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
             </Paper>
             <Confirm
               action={() => deleteChart({ variables: { id: chart.id } })}
-              title="Delete Dataset"
-              text="Are you sure you want to delete this dataset?"
+              title={`Delete ${chart.title}`}
+              text="Are you sure you want to delete this chart?"
               confirmText="Delete"
               cancelText="Cancel"
-              confirmColor="inherit"
               open={chart.deleting}
               onClose={() => setDeleting(chart.id, false)}
             />

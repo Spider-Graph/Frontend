@@ -176,6 +176,7 @@ const ChartPage: React.FunctionComponent = () => {
             ))}
           </form>
         </Fade>
+        <Fade in={!loading}>
         <div className={classes.bottomRow}>
           <div className={classes.icon}>
             <IconButton color="inherit" onClick={() => goBack()}>
@@ -188,6 +189,7 @@ const ChartPage: React.FunctionComponent = () => {
             </IconButton>
           </div>
         </div>
+        </Fade>
       </div>
     </Fade>
   );

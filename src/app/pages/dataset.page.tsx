@@ -170,18 +170,20 @@ const DatasetPage: React.FunctionComponent = () => {
             </div>
           </form>
         </Fade>
-        <div className={classes.bottomRow}>
-          <div className={classes.icon}>
-            <IconButton color="inherit" onClick={() => goBack()}>
-              <Icon>arrow_back</Icon>
-            </IconButton>
+        <Fade in={!loading}>
+          <div className={classes.bottomRow}>
+            <div className={classes.icon}>
+              <IconButton color="inherit" onClick={() => goBack()}>
+                <Icon>arrow_back</Icon>
+              </IconButton>
+            </div>
+            <div className={classes.icon}>
+              <IconButton color="inherit" onClick={() => handleSubmit()}>
+                <Icon>library_add</Icon>
+              </IconButton>
+            </div>
           </div>
-          <div className={classes.icon}>
-            <IconButton color="inherit" onClick={() => handleSubmit()}>
-              <Icon>library_add</Icon>
-            </IconButton>
-          </div>
-        </div>
+        </Fade>
       </div>
     </Fade>
   );
