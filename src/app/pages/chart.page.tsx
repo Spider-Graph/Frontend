@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.secondary.contrastText,
     backgroundColor: theme.palette.secondary.main,
     height: '100%',
-    minHeight: 'calc(100vh - theme.spacing(9))',
+    minHeight: `calc(100vh - ${theme.spacing(9)}px)`,
   },
   loading: {
     position: 'absolute',
