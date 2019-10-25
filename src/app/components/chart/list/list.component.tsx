@@ -18,11 +18,11 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   loading: {
+    position: 'absolute',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    margin: theme.spacing(2),
   },
   item: {
     color: theme.palette.text.secondary,
