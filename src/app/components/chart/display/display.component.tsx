@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   layout: {
     width: '100%',
     display: 'grid',
+    gridGap: theme.spacing(2),
     gridTemplateColumns: '1fr',
     justifyItems: 'center',
     [theme.breakpoints.up('md')]: {
