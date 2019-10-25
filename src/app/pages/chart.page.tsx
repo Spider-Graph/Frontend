@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
     height: '100%',
     minHeight: '100vh',
-    width: '100vw',
   },
   loading: {
     position: 'absolute',
@@ -29,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   form: {
-    padding: theme.spacing(1),
+    paddingTop: theme.spacing(1),
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
-    marginBottom: theme.spacing(9),
+    paddingBottom: theme.spacing(9),
   },
   spacer: {
     flex: 1,
