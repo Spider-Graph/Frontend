@@ -109,7 +109,7 @@ const ChartDisplay: React.FunctionComponent<ChartDisplayProps> = ({ id }) => {
         </div>
       </Fade>
 
-      <Fade in={!!datasets}>
+      <Fade in={!!datasets && !chart.loading}>
         <div className={classes.content}>
           <div className={classes.layout}>
             <div id="chartjs" className={classes.chart}>
