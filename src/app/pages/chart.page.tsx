@@ -75,7 +75,11 @@ const ChartPage: React.FunctionComponent = () => {
 
   const [addChart, addChartResponse] = useMutation<AddChart, AddChartVariables>(ADD_CHART);
   const [updateChart, updateChartResponse] = useMutation<UpdateChart, UpdateChartVariables>(UPDATE_CHART);
-  const chartDataResponse = useQuery<ChartData, ChartDataVariables>(CHART_DATA, { variables: { id }, skip: !id });
+  const chartDataResponse = useQuery<ChartData, ChartDataVariables>(CHART_DATA, {
+    variables: { id },
+    skip: !id,
+    fetchPolicy: 'network-only',
+  });
 
   React.useEffect(() => {
     if (!chartDataResponse.data) return;
