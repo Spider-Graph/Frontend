@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.secondary.contrastText,
     backgroundColor: theme.palette.secondary.main,
     height: '100%',
-    minHeight: `calc(100vh - ${theme.spacing(9)}px)`,
+    minHeight: '100vh',
   },
   loading: {
     position: 'absolute',
@@ -29,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   form: {
-    padding: theme.spacing(1),
+    paddingTop: theme.spacing(1),
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
-    marginBottom: theme.spacing(9),
+    paddingBottom: theme.spacing(9),
   },
   grid: {
     display: 'grid',
