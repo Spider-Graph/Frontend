@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryResult } from '@apollo/react-common';
 import { useMutation } from '@apollo/react-hooks';
 
-import { CircularProgress, Icon, Paper, Typography, makeStyles } from '@material-ui/core';
+import { CircularProgress, Icon, Fade, Paper, Typography, makeStyles } from '@material-ui/core';
 
 import { ChartUI } from '@models/ChartUI';
 import { useUndux } from '@hooks/useUndux';
@@ -58,7 +58,7 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
   const [, setTitle] = useUndux('title');
   const [, setError] = useUndux('error');
 
-  const [list, setList] = React.useState<ChartUI[]>([]);
+  const [list, setList] = React.useState<ChartUI[]>(null);
 
   const [deleteChart, deleteChartResponse] = useMutation<DeleteChart, DeleteChartVariables>(DELETE_CHART);
 
@@ -98,44 +98,48 @@ const ChartList: React.FunctionComponent<ChartListProps> = ({ charts }) => {
     setList(list.map((chart) => (chart.id === id ? { ...chart, deleting } : chart)));
   };
 
-  if (charts.loading)
-    return (
-      <div className={classes.loading}>
-        <CircularProgress />
-      </div>
-    );
-
+  const loading = charts.loading || deleteChartResponse.loading;
   return (
     <div className={classes.root}>
-      {list &&
-        list.map((chart) => (
-          <div key={chart.id}>
-            <Paper
-              className={selected === chart.id ? `${classes.item} ${classes.selected}` : classes.item}
-              elevation={selected === chart.id ? 10 : 2}
-            >
-              <Typography
-                className={selected === chart.id ? `${classes.text} ${classes.selectedText}` : classes.text}
-                variant="button"
-                onClick={() => select(chart.id, chart.title)}
-              >
-                {chart.title}
-              </Typography>
-              <Icon color="inherit" onClick={() => setDeleting(chart.id, true)}>
-                delete
-              </Icon>
-            </Paper>
-            <Confirm
-              action={() => deleteChart({ variables: { id: chart.id } })}
-              title={`Delete ${chart.title}`}
-              text="Are you sure you want to delete this chart?"
-              confirmText="Delete"
-              cancelText="Cancel"
-              open={chart.deleting}
-              onClose={() => setDeleting(chart.id, false)}
-            />
-          </div>
-        ))}
+      <Fade in={loading}>
+        <div className={classes.loading}>
+          <CircularProgress />
+        </div>
+      </Fade>
+      <Fade in={!loading}>
+        <div>
+          {list &&
+            list.map((chart) => (
+              <div key={chart.id}>
+                <Paper
+                  className={selected === chart.id ? `${classes.item} ${classes.selected}` : classes.item}
+                  elevation={selected === chart.id ? 10 : 2}
+                >
+                  <Typography
+                    className={selected === chart.id ? `${classes.text} ${classes.selectedText}` : classes.text}
+                    variant="button"
+                    onClick={() => select(chart.id, chart.title)}
+                  >
+                    {chart.title}
+                  </Typography>
+                  <Icon color="inherit" onClick={() => setDeleting(chart.id, true)}>
+                    delete
+                  </Icon>
+                </Paper>
+                <Confirm
+                  action={() => deleteChart({ variables: { id: chart.id } })}
+                  title={`Delete ${chart.title}`}
+                  text="Are you sure you want to delete this chart?"
+                  confirmText="Delete"
+                  cancelText="Cancel"
+                  open={chart.deleting}
+                  onClose={() => setDeleting(chart.id, false)}
+                />
+              </div>
+            )
+          )}
+        </div>
+      </Fade>
     </div>
   );
 };
